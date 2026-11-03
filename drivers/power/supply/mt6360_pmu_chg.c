@@ -49,7 +49,7 @@ static char __read_mostly *f_mode;
 module_param(f_mode, charp, 0444);
 #endif
 
-static bool dbg_log_en = true;
+static bool dbg_log_en;
 module_param(dbg_log_en, bool, 0644);
 #define mt_dbg(dev, fmt, ...) \
 	do { \
@@ -2619,7 +2619,7 @@ static int mt6360_get_tchg(struct charger_device *chg_dev,
 		mci->tchg = temp_jc;
 	mutex_unlock(&mci->tchg_lock);
 	*tchg_min = *tchg_max = temp_jc;
-	dev_info(mci->dev, "%s: tchg = %d\n", __func__, temp_jc);
+	dev_dbg(mci->dev, "%s: tchg = %d\n", __func__, temp_jc);
 	return 0;
 }
 
@@ -2708,7 +2708,7 @@ static int mt6360_get_zcv(struct charger_device *chg_dev, u32 *uV)
 {
 	struct mt6360_chg_info *mci = charger_get_data(chg_dev);
 
-	dev_info(mci->dev, "%s: zcv = %dmV\n", __func__, mci->zcv / 1000);
+	dev_dbg(mci->dev, "%s: zcv = %dmV\n", __func__, mci->zcv / 1000);
 	*uV = mci->zcv;
 	return 0;
 }
@@ -2757,11 +2757,11 @@ static int mt6360_dump_registers(struct charger_device *chg_dev)
 	ret = regmap_bulk_read(mci->regmap, MT6360_PMU_CHG_CTRL1, chg_ctrl, 2);
 	if (ret < 0)
 		return ret;
-	dev_info(mci->dev,
+	dev_dbg(mci->dev,
 		 "%s: ICHG = %dmA, AICR = %dmA, MIVR = %dmV, IEOC = %dmA, CV = %dmV\n",
 		 __func__, ichg / 1000, aicr / 1000, mivr / 1000, ieoc / 1000,
 		 cv / 1000);
-	dev_info(mci->dev,
+	dev_dbg(mci->dev,
 		 "%s: VBUS = %dmV, IBUS = %dmA, VSYS = %dmV, VBAT = %dmV, IBAT = %dmA\n",
 		 __func__,
 		 adc_vals[MT6360_ADC_VBUSDIV5] / 1000,
@@ -2769,9 +2769,9 @@ static int mt6360_dump_registers(struct charger_device *chg_dev)
 		 adc_vals[MT6360_ADC_VSYS] / 1000,
 		 adc_vals[MT6360_ADC_VBAT] / 1000,
 		 adc_vals[MT6360_ADC_IBAT] / 1000);
-	dev_info(mci->dev, "%s: CHG_EN = %d, CHG_STATUS = %s, CHG_STAT1 = 0x%02X\n",
+	dev_dbg(mci->dev, "%s: CHG_EN = %d, CHG_STATUS = %s, CHG_STAT1 = 0x%02X\n",
 		 __func__, chg_en, mt6360_chg_status_name[chg_stat], chg_stat1);
-	dev_info(mci->dev, "%s: CHG_CTRL1 = 0x%02X, CHG_CTRL2 = 0x%02X\n",
+	dev_dbg(mci->dev, "%s: CHG_CTRL1 = 0x%02X, CHG_CTRL2 = 0x%02X\n",
 		 __func__, chg_ctrl[0], chg_ctrl[1]);
 	return 0;
 }

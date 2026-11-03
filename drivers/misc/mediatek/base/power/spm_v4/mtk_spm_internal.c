@@ -212,7 +212,7 @@ do {						\
 	if (!suspend)				\
 		spm_debug(fmt, ##args);		\
 	else					\
-		spm_crit2(fmt, ##args);		\
+		pr_debug(fmt, ##args);		\
 } while (0)
 
 void rekick_vcorefs_scenario(void)

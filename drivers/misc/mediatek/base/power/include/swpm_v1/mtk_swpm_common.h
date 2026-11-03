@@ -54,13 +54,13 @@
 	}
 #define PROC_ENTRY(name)	{__stringify(name), &name ## _proc_fops}
 
-#define swpm_err                swpm_info
-#define swpm_warn               swpm_info
-#define swpm_info(fmt, args...) pr_notice(TAG""fmt, ##args)
+#define swpm_err(fmt, args...) pr_err(TAG""fmt, ##args)
+#define swpm_warn(fmt, args...) pr_warn(TAG""fmt, ##args)
+#define swpm_info(fmt, args...) pr_debug(TAG""fmt, ##args)
 #define swpm_dbg(fmt, args...)                           \
 	do {                                             \
 		if (swpm_debug)                          \
-			swpm_info(fmt, ##args);          \
+			pr_info(TAG""fmt, ##args);          \
 		else                                     \
 			pr_debug(TAG""fmt, ##args);      \
 	} while (0)

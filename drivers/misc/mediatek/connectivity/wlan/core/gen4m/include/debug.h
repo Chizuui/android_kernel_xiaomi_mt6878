@@ -52,6 +52,10 @@ extern uint32_t get_wifi_standalone_log_mode(void);
 #define DBG_CLASS_INFO2         BIT(9)
 #define DBG_CLASS_MASK          BITS(0, 9)
 
+/* Keep routine telemetry available through explicit debug levels. */
+#define DBG_LOG_LEVEL_RELEASE \
+	(DBG_CLASS_ERROR | DBG_CLASS_WARN | DBG_CLASS_STATE | DBG_CLASS_EVENT)
+
 #define DBG_LOG_LEVEL_DEFAULT \
 	(DBG_CLASS_ERROR | \
 	DBG_CLASS_WARN | \

@@ -692,10 +692,10 @@ void wlanDbgSetLogLevel(struct ADAPTER *prAdapter,
 		switch (u4Module) {
 		case ENUM_WIFI_LOG_MODULE_DRIVER:
 		{
-			uint32_t u4DriverLogMask = DBG_LOG_LEVEL_DEFAULT_VOC;
+			uint32_t u4DriverLogMask = DBG_LOG_LEVEL_RELEASE;
 
 			if (u4level == ENUM_WIFI_LOG_LEVEL_DEFAULT)
-				u4DriverLogMask = DBG_LOG_LEVEL_DEFAULT_VOC;
+				u4DriverLogMask = DBG_LOG_LEVEL_RELEASE;
 			else if (u4level == ENUM_WIFI_LOG_LEVEL_MORE)
 				u4DriverLogMask = DBG_LOG_LEVEL_MORE_VOC;
 			else if (u4level == ENUM_WIFI_LOG_LEVEL_EXTREME)

@@ -3488,7 +3488,7 @@ void wlanDebugInit(void)
 #else
 	if (!wlanDbgIsVocLogTestMode())
 		wlanSetDriverDbgLevel(DBG_ALL_MODULE_IDX,
-			DBG_LOG_LEVEL_DEFAULT_VOC);
+			DBG_LOG_LEVEL_RELEASE);
 	else
 		wlanSetDriverDbgLevel(DBG_ALL_MODULE_IDX,
 			DBG_LOG_LEVEL_VOC);

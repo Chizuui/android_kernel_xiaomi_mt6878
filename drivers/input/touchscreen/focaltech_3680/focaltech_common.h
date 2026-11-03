@@ -180,9 +180,9 @@ struct ts_ic_info {
  * DEBUG function define here
  *****************************************************************************/
 #if FTS_DEBUG_EN
-#define FTS_DEBUG(fmt, args...) pr_info("[FTS_TS]%s:" fmt "\n", __func__, ##args)
-#define FTS_FUNC_ENTER() pr_info("[FTS_TS]%s: Enter\n", __func__)
-#define FTS_FUNC_EXIT() pr_info("[FTS_TS]%s: Exit(%d)\n", __func__, __LINE__)
+#define FTS_DEBUG(fmt, args...) pr_debug("[FTS_TS]%s:" fmt "\n", __func__, ##args)
+#define FTS_FUNC_ENTER() pr_debug("[FTS_TS]%s: Enter\n", __func__)
+#define FTS_FUNC_EXIT() pr_debug("[FTS_TS]%s: Exit(%d)\n", __func__, __LINE__)
 #else /* #if FTS_DEBUG_EN*/
 #define FTS_DEBUG(fmt, args...)
 #define FTS_FUNC_ENTER()
