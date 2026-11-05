@@ -15,6 +15,7 @@
 #include <linux/nvmem-consumer.h>
 #include <linux/of_address.h>
 #include <linux/of_device.h>
+#include <linux/phy/phy-mtk.h>
 #include <linux/phy/phy.h>
 #include <linux/platform_device.h>
 #include <linux/regmap.h>
@@ -1288,9 +1289,33 @@ static int mtk_phy_set_mode(struct phy *phy, enum phy_mode mode, int submode)
 {
 	struct mtk_phy_instance *instance = phy_get_drvdata(phy);
 	struct mtk_tphy *tphy = dev_get_drvdata(phy->dev.parent);
+	void __iomem *com;
+	u32 tmp;
+	int ret;
 
-	if (instance->type == PHY_TYPE_USB2)
+	if (instance->type != PHY_TYPE_USB2)
+		return 0;
+	com = instance->u2_banks.com;
+
+	if (mode == PHY_MODE_USB_DEVICE &&
+	    (submode == PHY_MODE_BC11_SW_SET ||
+	     submode == PHY_MODE_BC11_SW_CLR)) {
+		/* Charger detection can run while the USB controller is idle. */
+		ret = clk_bulk_prepare_enable(TPHY_CLKS_CNT, instance->clks);
+		if (ret)
+			return ret;
+
+		tmp = readl(com + U3P_USBPHYACR6);
+		if (submode == PHY_MODE_BC11_SW_SET)
+			tmp |= PA6_RG_U2_BC11_SW_EN;
+		else
+			tmp &= ~PA6_RG_U2_BC11_SW_EN;
+		writel(tmp, com + U3P_USBPHYACR6);
+
+		clk_bulk_disable_unprepare(TPHY_CLKS_CNT, instance->clks);
+	} else {
 		u2_phy_instance_set_mode(tphy, instance, mode);
+	}
 
 	return 0;
 }

@@ -16,6 +16,7 @@
 #include <linux/hwid.h>
 #include <linux/platform_device.h>
 #include <linux/phy/phy.h>
+#include <linux/phy/phy-mtk.h>
 #include <linux/pm.h>
 #include <linux/pmic_voter.h>
 #include <linux/power_supply.h>
@@ -58,7 +59,9 @@ module_param(dbg_log_en, bool, 0644);
 	} while (0)
 
 /* Define this macro if DCD timeout is supported */
+#if !IS_ENABLED(CONFIG_MACH_MT6877) || IS_ENABLED(CONFIG_BATTERY_SAMSUNG_MTK)
 #define CONFIG_MT6360_DCDTOUT_SUPPORT
+#endif
 
 /* Define this macro if detecting apple samsung TA is needed */
 #define MT6360_APPLE_SAMSUNG_TA_SUPPORT
@@ -315,9 +318,6 @@ static const struct linear_range mt6360_chg_range[MT6360_RANGE_MAX] = {
 	MT6360_LINEAR_RANGE(MT6360_RANGE_AICC_VTH, 3900000, 0, 0x5F, 100000),
 };
 
-#define PHY_MODE_BC11_SET 1
-#define PHY_MODE_BC11_CLR 2
-
 void __attribute__ ((weak)) Charger_Detect_Init(void)
 {
 }
@@ -404,6 +404,7 @@ struct mt6360_chg_info {
 	bool pwr_rdy;
 	bool bc12_en;
 	bool bc12_rerun;
+	unsigned int bc12_retries;
 	bool hvdcp_disabled;
 	bool removing;
 	unsigned int hvdcp_retries;
@@ -755,20 +756,22 @@ static int DPDM_Switch_TO_CHG_upstream(struct mt6360_chg_info *mci,
 	int mode = 0;
 	int ret;
 
-	mode = switch_to_chg ? PHY_MODE_BC11_SET : PHY_MODE_BC11_CLR;
+	mode = switch_to_chg ? PHY_MODE_BC11_SW_SET : PHY_MODE_BC11_SW_CLR;
 	phy = phy_get(mci->dev, "usb2-phy");
-	if (IS_ERR_OR_NULL(phy)) {
-		dev_info(mci->dev, "phy_get fail\n");
-		return -EINVAL;
-	}
+	if (IS_ERR(phy))
+		return dev_err_probe(mci->dev, PTR_ERR(phy),
+				     "failed to get charger-detection PHY\n");
+	if (!phy)
+		return -ENODEV;
 
 	ret = phy_set_mode_ext(phy, PHY_MODE_USB_DEVICE, mode);
 	if (ret)
-		dev_info(mci->dev, "phy_set_mode_ext fail\n");
+		dev_err(mci->dev, "failed to switch charger-detection PHY: %d\n",
+			ret);
 
 	phy_put(mci->dev, phy);
 
-	return 0;
+	return ret;
 }
 
 static int mt6360_set_usbsw_state(struct mt6360_chg_info *mci, int state)
@@ -776,12 +779,8 @@ static int mt6360_set_usbsw_state(struct mt6360_chg_info *mci, int state)
 	dev_info(mci->dev, "%s: state = %d\n", __func__, state);
 
 	/* Switch D+D- to AP/MT6360 */
-	if (state == MT6360_USBSW_CHG)
-		DPDM_Switch_TO_CHG_upstream(mci, true);
-	else
-		DPDM_Switch_TO_CHG_upstream(mci, false);
-
-	return 0;
+	return DPDM_Switch_TO_CHG_upstream(mci,
+					 state == MT6360_USBSW_CHG);
 }
 
 #ifndef CONFIG_MT6360_DCDTOUT_SUPPORT
@@ -882,7 +881,9 @@ static int __mt6360_enable_usbchgen(struct mt6360_chg_info *mci, bool en)
 		else
 			dev_info(mci->dev, "%s: CDP free\n", __func__);
 	}
-	mt6360_set_usbsw_state(mci, usbsw);
+	ret = mt6360_set_usbsw_state(mci, usbsw);
+	if (ret < 0)
+		return ret;
 	ret = regmap_update_bits(mci->regmap, MT6360_PMU_DEVICE_TYPE,
 				 MT6360_USBCHGEN_MASK, en ? 0xff : 0);
 	if (ret >= 0)
@@ -1267,6 +1268,29 @@ static int __maybe_unused mt6360_toggle_usbchgen(struct mt6360_chg_info *mci)
 }
 #endif
 
+static int mt6360_retry_bc12(struct mt6360_chg_info *mci)
+{
+	int i, ret;
+
+	/* Xiaomi's detector workaround toggles USBCHGEN twice, 10 ms apart. */
+	for (i = 0; i < 2; i++) {
+		ret = regmap_update_bits(mci->regmap, MT6360_PMU_DEVICE_TYPE,
+					 MT6360_USBCHGEN_MASK, 0);
+		if (ret < 0)
+			return ret;
+		udelay(40);
+		ret = regmap_update_bits(mci->regmap, MT6360_PMU_DEVICE_TYPE,
+					 MT6360_USBCHGEN_MASK,
+					 MT6360_USBCHGEN_MASK);
+		if (ret < 0)
+			return ret;
+		if (!i)
+			usleep_range(10000, 11000);
+	}
+
+	return 0;
+}
+
 static int mt6360_chgdet_post_process(struct mt6360_chg_info *mci)
 {
 	int ret = 0, attach = ATTACH_TYPE_NONE;
@@ -1300,6 +1324,7 @@ static int mt6360_chgdet_post_process(struct mt6360_chg_info *mci)
 		mci->hvdcp_retries = 0;
 		mci->hvdcp_disabled = false;
 		mci->bc12_rerun = false;
+		mci->bc12_retries = 0;
 		if (IS_ENABLED(CONFIG_MACH_MT6877))
 			regmap_write(mci->regmap, MT6360_PMU_DPDM_CTRL,
 				     MT6360_DPDM_RELEASE);
@@ -1363,6 +1388,18 @@ static int mt6360_chgdet_post_process(struct mt6360_chg_info *mci)
 		mci->sec_cable_type = SEC_BATTERY_CABLE_TA;
 #endif
 		break;
+	}
+
+	if (IS_ENABLED(CONFIG_MACH_MT6877) &&
+	    !IS_ENABLED(CONFIG_BATTERY_SAMSUNG_MTK) &&
+	    usb_status == MT6360_CHG_TYPE_SDPNSTD &&
+	    ++mci->bc12_retries < 6) {
+		ret = mt6360_retry_bc12(mci);
+		if (ret >= 0) {
+			mci->bc12_rerun = true;
+			return 0;
+		}
+		dev_err(mci->dev, "charger-detection retry failed: %d\n", ret);
 	}
 
 #if defined(CONFIG_BATTERY_SAMSUNG_MTK)
@@ -2431,13 +2468,16 @@ static int mt6360_rerun_apsd(struct charger_device *chg_dev, bool disable_hvdcp)
 	if (mci->tcpc_dev && tcpm_inquire_pd_connected(mci->tcpc_dev))
 		goto out;
 	if (mci->psy_desc.type != POWER_SUPPLY_TYPE_USB_DCP &&
-	    mci->psy_desc.type != POWER_SUPPLY_TYPE_USB_HVDCP)
+	    mci->psy_desc.type != POWER_SUPPLY_TYPE_USB_HVDCP &&
+	    !(mci->psy_desc.type == POWER_SUPPLY_TYPE_USB &&
+	      mci->psy_usb_type == POWER_SUPPLY_USB_TYPE_DCP))
 		goto out;
 
 	ret = regmap_write(mci->regmap, MT6360_PMU_DPDM_CTRL,
 			   MT6360_DPDM_RELEASE);
 	if (ret < 0)
 		goto out;
+	msleep(50);
 	ret = __mt6360_enable_usbchgen(mci, false);
 	if (ret < 0)
 		goto out;
@@ -4216,7 +4256,7 @@ static int mt6360_chg_init_setting(struct mt6360_chg_info *mci)
 		dev_dbg(mci->dev, "%s: read BATSYSUV fail\n", __func__);
 		return ret;
 	}
-	if (!(ret & MT6360_CHG_BATSYSUV_MASK)) {
+	if (!(regval & MT6360_CHG_BATSYSUV_MASK)) {
 		dev_info(mci->dev, "%s: BATSYSUV occurred\n", __func__);
 		if (regmap_update_bits(mci->regmap, MT6360_PMU_CHG_STAT,
 					 MT6360_CHG_BATSYSUV_MASK, 0xff) < 0)

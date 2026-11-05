@@ -6,6 +6,7 @@
  * Copyright (C) 2022 XiaoMi, Inc.
  */
 
+#include <dt-bindings/phy/phy.h>
 #include "mediatek/xiaomi-mt6877-common.dtsi"
 #include "mediatek/ruby-mt6877-audio.dtsi"
 #include "mediatek/cust_ruby_camera.dtsi"
@@ -361,6 +362,8 @@
 	xmusb350@35 {
 		compatible = "xmusb350";
 		reg = <0x35>;
+		phys = <&u2port0 PHY_TYPE_USB2>;
+		phy-names = "usb2-phy";
 		pinctrl-names = "xmusb350_normal", "xmusb350_isp";
 		//pinctrl-0 = <&xmusb350_rst_normal &xmusb350_sda_normal &xmusb350_scl_normal>;
 		//pinctrl-1 = <&xmusb350_rst_isp &xmusb350_sda_isp &xmusb350_scl_isp>;

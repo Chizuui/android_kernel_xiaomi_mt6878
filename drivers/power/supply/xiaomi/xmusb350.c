@@ -28,6 +28,8 @@
 #include <linux/gpio.h>
 #include <linux/of_gpio.h>
 #include <linux/pinctrl/consumer.h>
+#include <linux/phy/phy.h>
+#include <linux/phy/phy-mtk.h>
 #include <linux/firmware.h>
 #include <linux/stat.h>
 #include <linux/ctype.h>
@@ -109,6 +111,7 @@ struct xmusb350_charger {
 	struct i2c_client		*client;
 	struct device			*dev;
 	struct regmap			*regmap;
+	struct phy			*usb2_phy;
 	struct wakeup_source 		*irq_handle_wakelock;
 	struct wakeup_source 		*check_hvdcp3_wakelock;
 	struct wakeup_source 		*check_usb_ready_wakelock;
@@ -194,9 +197,6 @@ enum product_name {
 
 static int product_name = UNKNOW;
 
-void __attribute__ ((weak)) Charger_Detect_Init(void) { }
-void __attribute__ ((weak)) Charger_Detect_Release(void) { }
-
 bool __attribute__ ((weak)) is_usb_rdy(struct device *dev)
 {
 	struct device_node *node;
@@ -212,7 +212,7 @@ bool __attribute__ ((weak)) is_usb_rdy(struct device *dev)
 }
 
 static int xmusb350_psy_chg_type_changed(struct xmusb350_charger *chip);
-static void xmusb350_set_usbsw_state(struct xmusb350_charger *chip, int state);
+static int xmusb350_set_usbsw_state(struct xmusb350_charger *chip, int state);
 static int log_level = 1;
 static uint32_t *file_data;
 static uint32_t *file_date_w;
@@ -740,7 +740,9 @@ static int xmusb350_update_chgtype(struct xmusb350_charger *chip, int xmusb_type
 		charger_dev_set_ac_ovp(chip->slave_cp, CP_VAC_OVP_6500MV);
 	}
 
-	xmusb350_set_usbsw_state(chip, chip->usb_switch);
+	ret = xmusb350_set_usbsw_state(chip, chip->usb_switch);
+	if (ret)
+		return ret;
 	ret = xmusb350_psy_chg_type_changed(chip);
 
 	return ret;
@@ -886,16 +888,20 @@ done:
 	return;
 }
 
-static void xmusb350_set_usbsw_state(struct xmusb350_charger *chip, int usbsw)
+static int xmusb350_set_usbsw_state(struct xmusb350_charger *chip, int usbsw)
 {
+	int mode, ret;
+
 	xm35_info("switch DPDM to %s\n", usbsw == USBSW_XMUSB350 ? "XMUSB350" : "SOC");
 
-	if (usbsw == USBSW_XMUSB350)
-		Charger_Detect_Init();
-	else
-		Charger_Detect_Release();
+	mode = usbsw == USBSW_XMUSB350 ? PHY_MODE_BC11_SW_SET :
+					PHY_MODE_BC11_SW_CLR;
+	ret = phy_set_mode_ext(chip->usb2_phy, PHY_MODE_USB_DEVICE, mode);
+	if (ret)
+		dev_err(chip->dev, "failed to switch charger-detection PHY: %d\n",
+			ret);
 
-	return;
+	return ret;
 }
 
 static irqreturn_t xmusb350_interrupt(int irq, void *dev_id)
@@ -938,7 +944,9 @@ static int xmusb350_enable_chg_type_det(struct xmusb350_charger *chip, bool en)
 			early_boot = true;
 
 		chip->usb_switch = USBSW_XMUSB350;
-		xmusb350_set_usbsw_state(chip, chip->usb_switch);
+		ret = xmusb350_set_usbsw_state(chip, chip->usb_switch);
+		if (ret)
+			return ret;
 
 		if (early_boot) {
 			xmusb350_rerun_apsd(chip);
@@ -1017,9 +1025,8 @@ static int ops_xmusb350_enable_otg(struct charger_device *chg_dev, bool en)
 #endif
 	}
 	chip->otg_enable = en;
-	xmusb350_set_usbsw_state(chip, chip->usb_switch);
 
-	return 0;
+	return xmusb350_set_usbsw_state(chip, chip->usb_switch);
 }
 
 static int ops_get_first_charger_type(struct charger_device *chg_dev)
@@ -1652,6 +1659,11 @@ static int xmusb350_charger_probe(struct i2c_client *client)
 
 	chip->client = client;
 	chip->dev = &client->dev;
+
+	chip->usb2_phy = devm_phy_get(chip->dev, "usb2-phy");
+	if (IS_ERR(chip->usb2_phy))
+		return dev_err_probe(chip->dev, PTR_ERR(chip->usb2_phy),
+				     "failed to get charger-detection PHY\n");
 
 	mutex_init(&chip->isp_sequence_lock);
 	chip->irq_handle_wakelock = wakeup_source_register(NULL, "xmusb350_irq_handle_wakelock");
