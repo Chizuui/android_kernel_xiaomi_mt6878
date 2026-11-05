@@ -96,26 +96,28 @@ static void ruby_rotation_reset_workfn(struct work_struct *work)
 {
 	int cpu, heavy = 0;
 
-	if (!READ_ONCE(ruby_rotation_uclamp_active))
-		return;
+	mutex_lock(&ruby_rotation_boost_lock);
+	if (!ruby_rotation_uclamp_active)
+		goto unlock;
 
 	if (READ_ONCE(ruby_rotation_enabled)) {
+		rcu_read_lock();
 		for_each_online_cpu(cpu)
-			if (READ_ONCE(cpu_rq(cpu)->misfit_task_load))
+			if (cpu_active(cpu) &&
+			    ruby_rotation_task_heavy(cpu_rq(cpu)))
 				heavy++;
+		rcu_read_unlock();
 		if (heavy >= RUBY_ROTATION_HEAVY_TASKS) {
 			mod_delayed_work(system_highpri_wq,
 					 &ruby_rotation_reset_work,
 					 msecs_to_jiffies(64));
-			return;
+			goto unlock;
 		}
 	}
 
-	mutex_lock(&ruby_rotation_boost_lock);
-	if (ruby_rotation_uclamp_active) {
-		ruby_rotation_set_top_app_uclamp(false);
-		WRITE_ONCE(ruby_rotation_uclamp_active, false);
-	}
+	ruby_rotation_set_top_app_uclamp(false);
+	WRITE_ONCE(ruby_rotation_uclamp_active, false);
+unlock:
 	mutex_unlock(&ruby_rotation_boost_lock);
 }
 
@@ -181,7 +183,7 @@ static void ruby_rotation_tick(void *unused, struct rq *source_rq)
 	rcu_read_lock();
 	for_each_online_cpu(cpu) {
 		rq = cpu_rq(cpu);
-		if (READ_ONCE(rq->misfit_task_load))
+		if (cpu_active(cpu) && ruby_rotation_task_heavy(rq))
 			heavy++;
 	}
 	if (heavy < RUBY_ROTATION_HEAVY_TASKS)

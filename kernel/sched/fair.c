@@ -5124,6 +5124,18 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
 	return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
 }
 
+#ifdef CONFIG_MTK_RUBY_BIG_TASK_ROTATION
+bool ruby_rotation_task_heavy(struct rq *rq)
+{
+	struct task_struct *p = rcu_dereference(rq->curr);
+
+	/* A rotation's own UCLAMP_MIN vote must not keep that vote alive. */
+	return p && READ_ONCE(p->sched_class) == &fair_sched_class &&
+	       READ_ONCE(p->nr_cpus_allowed) > 1 &&
+	       !fits_capacity(task_util_est(p), capacity_of(cpu_of(rq)));
+}
+#endif
+
 static inline int is_misfit_task(struct task_struct *p, struct rq *rq,
 				 misfit_reason_t *reason)
 {
