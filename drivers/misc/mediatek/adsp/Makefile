@@ -18,8 +18,11 @@ else
 MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))
 endif
 
-# mt6877 has no adsp platform dir; use mt6853 (same family)
+# mt6877/mt6768 have no adsp platform dir; use mt6853 (same family)
 ifeq ($(MTK_PLATFORM),mt6877)
+MTK_PLATFORM := mt6853
+endif
+ifeq ($(MTK_PLATFORM),mt6768)
 MTK_PLATFORM := mt6853
 endif
 

@@ -3497,7 +3497,7 @@ static void ddp_cmdq_cb(struct cmdq_cb_data data)
 #endif
 #if defined(CONFIG_MACH_MT6873) || defined(CONFIG_MACH_MT6853) || \
 	defined(CONFIG_MACH_MT6833) || defined(CONFIG_MACH_MT6877) \
-	|| defined(CONFIG_MACH_MT6781)
+	|| defined(CONFIG_MACH_MT6781) || defined(CONFIG_MACH_MT6768)
 		if ((ovl_status & 1) && __ratelimit(&ovl_status_ratelimit)) {
 			DDPPR_ERR("ovl status error\n");
 			mtk_drm_crtc_analysis(crtc);

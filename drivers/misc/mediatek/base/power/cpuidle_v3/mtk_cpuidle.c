@@ -312,6 +312,33 @@ static void mtk_platform_restore(int cpu)
 	mt_restore_dbg_regs(dbg_data, cpu);
 }
 
+#if defined(CONFIG_MACH_MT6768)
+/*
+ * 6.6 arm64 dropped arm_cpuidle_suspend() (4.19 arch/arm64 cpu_ops
+ * wrapper). MTK idle "mode" is the DT idle-state index; translate to
+ * the PSCI suspend param from mt6768.dts (arm,psci-suspend-param)
+ * and enter via psci_cpu_suspend_enter().
+ * ponytail: hard-coded table; move to DT-driven lookup (cpuidle-psci
+ * state table) if MTK switches cpuidle to the generic DT driver.
+ */
+static int mtk_psci_suspend(int mode)
+{
+	static const u32 psci_state[] = {
+		[MTK_STANDBY_MODE]	= 0x00000001,
+		[MTK_MCDI_CPU_MODE]	= 0x00010001,
+		[MTK_MCDI_CLUSTER_MODE]	= 0x01010001,
+		[4]	= 0x01010002, /* MTK_IDLEDRAM_MODE / MTK_SODI_MODE */
+		[5]	= 0x01010003, /* MTK_IDLESYSPLL_MODE / MTK_SODI3_MODE */
+		[6]	= 0x01010004, /* MTK_IDLEBUS26M_MODE / MTK_DPIDLE_MODE */
+		[MTK_SUSPEND_MODE]	= 0x01010005,
+	};
+
+	if (mode < 0 || mode >= (int)ARRAY_SIZE(psci_state))
+		return -EINVAL;
+	return psci_cpu_suspend_enter(psci_state[mode]);
+}
+#endif
+
 int mtk_enter_idle_state(int mode)
 {
 	int cpu, ret;
@@ -336,7 +363,11 @@ int mtk_enter_idle_state(int mode)
 		 * call the CPU ops suspend protocol with idle index as a
 		 * parameter.
 		 */
+#if defined(CONFIG_MACH_MT6768)
+		ret = mtk_psci_suspend(mode);
+#else
 		ret = arm_cpuidle_suspend(mode);
+#endif
 
 		cpuidle_fp(cpu, CPUIDLE_FP_AFTER_ATF);
 		cpuidle_ts(cpu, CPUIDLE_TS_AFTER_ATF);
