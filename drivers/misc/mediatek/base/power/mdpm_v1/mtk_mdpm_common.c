@@ -36,7 +36,9 @@ static bool md1_ccci_ready;
 #define _BIT_(_bit_)		(unsigned int)(1 << (_bit_))
 #define _BITMASK_(_bits_)	\
 (((unsigned int)-1>>(31-((1)?_bits_)))&~((1U<<((0)?_bits_))-1))
+#ifndef MAX
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
+#endif
 
 u32 __attribute__ ((weak))
 spm_vcorefs_get_MD_status(void)
@@ -51,7 +53,7 @@ void init_md_section_level(enum pbm_kicker kicker)
 	u32 *share_mem = NULL;
 #if defined(CONFIG_MTK_ECCCI_DRIVER)
 	share_mem =
-		(u32 *)get_smem_start_addr(MD_SYS1, SMEM_USER_RAW_DBM, NULL);
+		(u32 *)get_smem_start_addr(SMEM_USER_RAW_DBM, NULL);
 	if (share_mem == NULL) {
 		pr_notice("ERROR: can't get SMEM_USER_RAW_DBM address");
 		return;
@@ -103,7 +105,7 @@ int get_md1_power(enum mdpm_power_type power_type, bool need_update)
 #ifdef MD_POWER_UT
 	share_mem = fake_share_mem;
 #else
-	share_mem = (u32 *)get_smem_start_addr(MD_SYS1, 0, NULL);
+	share_mem = (u32 *)get_smem_start_addr(0, NULL);
 #endif
 	dbm_power = get_md1_dBm_power(scenario, share_mem, power_type);
 	g_dbm_power[power_type] = dbm_power;
@@ -171,13 +173,12 @@ static int mt_ ## name ## _proc_open(struct inode *inode, struct file *file)\
 {									\
 	return single_open(file, mt_ ## name ## _proc_show, PDE_DATA(inode));\
 }									\
-static const struct file_operations mt_ ## name ## _proc_fops = {	\
-	.owner		= THIS_MODULE,					\
-	.open		= mt_ ## name ## _proc_open,			\
-	.read		= seq_read,					\
-	.llseek		= seq_lseek,					\
-	.release	= single_release,				\
-	.write		= mt_ ## name ## _proc_write,			\
+static const struct proc_ops mt_ ## name ## _proc_fops = {	\
+	.proc_open	= mt_ ## name ## _proc_open,			\
+	.proc_read	= seq_read,					\
+	.proc_lseek	= seq_lseek,					\
+	.proc_release	= single_release,				\
+	.proc_write	= mt_ ## name ## _proc_write,			\
 }
 
 #define PROC_FOPS_RO(name)						\
@@ -185,12 +186,11 @@ static int mt_ ## name ## _proc_open(struct inode *inode, struct file *file)\
 {									\
 	return single_open(file, mt_ ## name ## _proc_show, PDE_DATA(inode));\
 }									\
-static const struct file_operations mt_ ## name ## _proc_fops = {	\
-	.owner		= THIS_MODULE,				\
-	.open		= mt_ ## name ## _proc_open,		\
-	.read		= seq_read,				\
-	.llseek		= seq_lseek,				\
-	.release	= single_release,			\
+static const struct proc_ops mt_ ## name ## _proc_fops = {	\
+	.proc_open	= mt_ ## name ## _proc_open,		\
+	.proc_read	= seq_read,				\
+	.proc_lseek	= seq_lseek,				\
+	.proc_release	= single_release,			\
 }
 
 #define PROC_ENTRY(name)	{__stringify(name), &mt_ ## name ## _proc_fops}
@@ -205,7 +205,7 @@ static int mt_mdpm_create_procfs(void)
 
 	struct pentry {
 		const char *name;
-		const struct file_operations *fops;
+		const struct proc_ops *fops;
 	};
 
 	const struct pentry entries[] = {

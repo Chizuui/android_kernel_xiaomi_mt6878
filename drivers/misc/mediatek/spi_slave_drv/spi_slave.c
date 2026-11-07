@@ -479,11 +479,10 @@ static int spi_slave_probe(struct spi_device *spi)
 	return 0;
 }
 
-static int spi_slave_remove(struct spi_device *spi)
+static void spi_slave_remove(struct spi_device *spi)
 {
 	if (spi && spi->controller_data)
 		kfree(spi->controller_data);
-	return 0;
 }
 
 static const struct of_device_id spi_slave_of_ids[] = {

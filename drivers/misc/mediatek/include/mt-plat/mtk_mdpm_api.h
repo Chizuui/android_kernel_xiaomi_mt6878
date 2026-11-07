@@ -25,7 +25,11 @@ enum pbm_kicker {
 	KR_FLASH		/* 5 */
 };
 
+#if defined(CONFIG_MACH_MT6768)
+extern void init_md_section_level(enum pbm_kicker kicker);
+#else
 extern void init_md_section_level(enum pbm_kicker kicker, u32 *share_mem);
+#endif
 extern int get_md1_power(enum mdpm_power_type power_type, bool need_update);
 
 #endif

@@ -241,7 +241,7 @@ static int pmic_regulator_buck_dts_parser(struct platform_device *pdev,
 		config.of_node = pmic_regulator_buck_matches[i].of_node;
 		config.driver_data = &(mt_bucks[i]);
 		mt_bucks[i].desc.owner = THIS_MODULE;
-		rdev = regulator_register(&mt_bucks[i].desc, &config);
+		rdev = regulator_register(config.dev, &mt_bucks[i].desc, &config);
 
 		if (IS_ERR(rdev)) {
 			ret = PTR_ERR(rdev);
@@ -329,7 +329,7 @@ static int pmic_regulator_ldo_dts_parser(struct platform_device *pdev,
 		config.driver_data = pmic_regulator_ldo_matches[i].driver_data;
 		mt_ldos[i].desc.owner = THIS_MODULE;
 
-		rdev = regulator_register(&mt_ldos[i].desc, &config);
+		rdev = regulator_register(config.dev, &mt_ldos[i].desc, &config);
 
 		if (IS_ERR(rdev)) {
 			ret = PTR_ERR(rdev);

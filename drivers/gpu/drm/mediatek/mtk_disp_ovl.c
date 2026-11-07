@@ -3404,7 +3404,7 @@ static void ovl_dump_layer_info_compress(struct mtk_ddp_comp *comp, int layer,
 static void ovl_dump_layer_info(struct mtk_ddp_comp *comp, int layer,
 				bool is_ext_layer)
 {
-	unsigned int con, src_size, offset, pitch, addr, clip;
+	unsigned int con, src_size, offset, pitch, addr = 0, clip;
 	/*  enum UNIFIED_COLOR_FMT fmt; */
 	void __iomem *baddr = comp->regs;
 	void __iomem *Lx_base;

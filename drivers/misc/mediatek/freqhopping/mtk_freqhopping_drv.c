@@ -144,12 +144,11 @@ static int freqhopping_slt_test_proc_open(struct inode *inode
 	return single_open(file, freqhopping_slt_test_proc_read, NULL);
 }
 
-static const struct file_operations slt_test_fops = {
-	.owner = THIS_MODULE,
-	.open = freqhopping_slt_test_proc_open,
-	.read = seq_read,
-	.write = freqhopping_slt_test_proc_write,
-	.release = single_release,
+static const struct proc_ops slt_test_fops = {
+	.proc_open = freqhopping_slt_test_proc_open,
+	.proc_read = seq_read,
+	.proc_write = freqhopping_slt_test_proc_write,
+	.proc_release = single_release,
 };
 #endif /* SUPPORT_SLT_TEST */
 
@@ -159,11 +158,10 @@ static int freqhopping_dumpregs_proc_open(struct inode *inode
 	return single_open(file, g_p_fh_hal_drv->mt_fh_hal_dumpregs_read, NULL);
 }
 
-static const struct file_operations dumpregs_fops = {
-	.owner = THIS_MODULE,
-	.open = freqhopping_dumpregs_proc_open,
-	.read = seq_read,
-	.release = single_release,
+static const struct proc_ops dumpregs_fops = {
+	.proc_open = freqhopping_dumpregs_proc_open,
+	.proc_read = seq_read,
+	.proc_release = single_release,
 };
 
 static int freqhopping_debug_proc_read(struct seq_file *m, void *v)
@@ -239,12 +237,11 @@ static int freqhopping_debug_proc_open(struct inode *inode, struct file *file)
 	return single_open(file, freqhopping_debug_proc_read, NULL);
 }
 
-static const struct file_operations freqhopping_debug_fops = {
-	.owner = THIS_MODULE,
-	.open = freqhopping_debug_proc_open,
-	.read = seq_read,
-	.write = freqhopping_debug_proc_write,
-	.release = single_release,
+static const struct proc_ops freqhopping_debug_fops = {
+	.proc_open = freqhopping_debug_proc_open,
+	.proc_read = seq_read,
+	.proc_write = freqhopping_debug_proc_write,
+	.proc_release = single_release,
 };
 
 #define FH_STATUS_PROC_BANNER \
@@ -353,12 +350,11 @@ static int freqhopping_status_proc_open(struct inode *inode, struct file *file)
 	return single_open(file, freqhopping_status_proc_read, NULL);
 }
 
-static const struct file_operations status_fops = {
-	.owner = THIS_MODULE,
-	.open = freqhopping_status_proc_open,
-	.read = seq_read,
-	.write = freqhopping_status_proc_write,
-	.release = single_release,
+static const struct proc_ops status_fops = {
+	.proc_open = freqhopping_status_proc_open,
+	.proc_read = seq_read,
+	.proc_write = freqhopping_status_proc_write,
+	.proc_release = single_release,
 };
 
 static int mt_fh_hal_ctrl_lock(struct freqhopping_ioctl *fh_ctl, bool enable)

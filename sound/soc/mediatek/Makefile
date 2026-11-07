@@ -81,6 +81,11 @@ endif
 
 ifeq ($(CONFIG_SND_SOC_MTK_AUDIO_DSP),y)
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/audio_ipi/common_v2/tasks/audplayback/
+# MT6768 reuses the MT6853 ADSP and DSP platform headers
+ifeq ($(MTK_PLATFORM),mt6768)
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/adsp/mt6853
+subdir-ccflags-y += -I$(srctree)/sound/soc/mediatek/audio_dsp/mt6853
+endif
 endif
 
 ifeq ($(CONFIG_SND_SOC_MTK_SMART_PHONE),y)

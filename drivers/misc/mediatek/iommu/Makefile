@@ -23,5 +23,5 @@ endif
 obj-$(CONFIG_MTK_IOMMU_MISC_SEC) += m4u_secure.o
 obj-$(CONFIG_MTK_IOMMU_MISC_DBG) += m4u_debug.o
 ifeq ($(CONFIG_MTK_PSEUDO_M4U),)
-obj-$(CONFIG_MTK_ENABLE_GENIEZONE) += iommu_pseudo.o
+obj-$(CONFIG_MTK_CAM_GENIEZONE_SUPPORT) += iommu_pseudo.o
 endif
