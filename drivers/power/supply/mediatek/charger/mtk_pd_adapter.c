@@ -791,8 +791,10 @@ static int adapter_parse_dt(struct mtk_pd_adapter_info *info,
 	}
 
 	if (of_property_read_string(np, "adapter_name",
-		&info->adapter_dev_name) < 0)
+		&info->adapter_dev_name) < 0) {
 		chr_err("%s: no adapter name\n", __func__);
+		return -EINVAL;
+	}
 
 	return 0;
 }
@@ -812,6 +814,11 @@ static void adapter_parse_cmdline(void)
 {
 	char *ruby = NULL, *rubypro = NULL, *rubyplus = NULL;
 	const char *sku = get_hw_sku();
+
+	if (!sku) {
+		chr_err("hardware SKU unavailable; using default PD profile\n");
+		return;
+	}
 
 	ruby = strnstr(sku, "ruby", strlen(sku));
 	rubypro = strnstr(sku, "rubypro", strlen(sku));
@@ -842,7 +849,9 @@ static int mtk_pd_adapter_probe(struct platform_device *pdev)
 	if (!info)
 		return -ENOMEM;
 
-	adapter_parse_dt(info, &pdev->dev);
+	ret = adapter_parse_dt(info, &pdev->dev);
+	if (ret < 0)
+		goto err_register_adapter_dev;
 
 	info->adapter_dev = adapter_device_register(info->adapter_dev_name,
 		&pdev->dev, info, &adapter_ops, NULL);
