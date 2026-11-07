@@ -12,7 +12,7 @@
 #if defined(CONFIG_THERMAL)
 #include <mtk_thermal.h> /* mtkTTimer_start/cancel_timer */
 #endif
-#include <mtk_idle_profile.h>
+#include "mtk_idle_profile.h"
 #include <linux/atomic.h>
 
 DEFINE_MUTEX(mtk_idle_module_locker);
@@ -319,8 +319,10 @@ int mtk_idle_enter(int idle_type,
 
 	__profile_idle_start(PIDX_ENTER_TOTAL);
 
-	/* Disable rcu lock checking */
-	rcu_irq_enter_irqson();
+	/*
+	 * 6.6: rcu_irq_enter()/rcu_irq_exit() were removed. RCU EQS entry is
+	 * now handled by the cpuidle core, so nothing is needed here.
+	 */
 
 	/* idle pre handler: setup notification/thermal/ufs */
 	__profile_idle_start(PIDX_PRE_HANDLER);
@@ -402,8 +404,7 @@ RESTORE_UART:
 	mtk_idle_power_post_process_async_wait(idle_type, op_cond);
 	__profile_idle_stop(PIDX_PWR_POST_WFI_WAIT);
 
-	/* Eable rcu lock checking */
-	rcu_irq_exit_irqson();
+
 
 	__mtk_idle_footprint(IDLE_FP_PWR_POST_SYNC);
 

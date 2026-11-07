@@ -2,7 +2,11 @@ ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/spm/$(MTK_PLATFORM)/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/include/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/$(MTK_PLATFORM)/
+# spm/common holds the v2 implementation; pulling it in here shadows the
+# common_v1 headers (e.g. mtk_idle_internal.h) for legacy SoCs.
+ifneq ($(CONFIG_MACH_MT6768),y)
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/spm/common/
+endif
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/spm/$(MTK_PLATFORM)/
 ifeq ($(CONFIG_MTK_UFS_SUPPORT), y)
 ccflags-y += -I$(srctree)/drivers/scsi/ufs/

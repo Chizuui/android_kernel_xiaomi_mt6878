@@ -6,3 +6,7 @@ else
 obj-y += common/
 endif
 obj-y += $(MTK_PLATFORM)/
+
+# Put the platform SPM headers ahead of the generic ones in
+# base/power/include so that mtk_spm_reg.h resolves to the per-SoC file.
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/spm/$(MTK_PLATFORM)
