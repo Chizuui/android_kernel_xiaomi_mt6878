@@ -24,6 +24,7 @@
 #include <trace/events/pob.h>
 
 #include "helio-dvfsrc.h"
+extern u32 qos_sram_read(u32 offset);
 //#include "mtk_qos_sram.h"
 
 

@@ -1313,8 +1313,8 @@ page_owner=on loop.max_part=7";
 			"infra-ccif1-md",
 			"infra-ccif2-ap",
 			"infra-ccif2-md";
-		_vmodem-supply = <&mt_pmic_vmodem_buck_reg>;
-		_vcore-supply = <&mt_pmic_vcore_buck_reg>;
+		_vmodem-supply = <&mt6358_vmodem_reg>;
+		_vcore-supply = <&mt6358_vcore_reg>;
 		ccci-infracfg = <&infracfg_ao>;
 	};
 
@@ -4266,9 +4266,9 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
                         "gc6133c_mclk_off";
         pinctrl-0 = <&camera_pins_gc6133c_mclk_on>;
         pinctrl-1 = <&camera_pins_gc6133c_mclk_off>;
-        vcama-supply = <&mt_pmic_vcama1_ldo_reg>;
-        vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
-        vcamd-supply = <&mt_pmic_vcamd_ldo_reg>;
+        vcama-supply = <&mt6358_vcama1_reg>;
+        vcamio-supply = <&mt6358_vcamio_reg>;
+        vcamd-supply = <&mt6358_vcamd_reg>;
         status = "okay";
       };
         sc080cs@36 {
@@ -4279,9 +4279,9 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
                         "sc080cs_mclk_off";
         pinctrl-0 = <&camera_pins_sc080cs_mclk_on>;
         pinctrl-1 = <&camera_pins_sc080cs_mclk_off>;
-        vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
-        vcama-supply = <&mt_pmic_vcama1_ldo_reg>;
-        vcamd-supply = <&mt_pmic_vcamd_ldo_reg>;
+        vcamio-supply = <&mt6358_vcamio_reg>;
+        vcama-supply = <&mt6358_vcama1_reg>;
+        vcamd-supply = <&mt6358_vcamd_reg>;
         status = "okay";
       };
       /*QVGA's ending add by liushuangshuang1@longcheer.com*/

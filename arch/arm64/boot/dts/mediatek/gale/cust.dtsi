@@ -494,7 +494,7 @@
  * PMIC DTSI File
 *************************/
 
-&mt_pmic_vcama1_ldo_reg {
+&mt6358_vcama1_reg {
 	regulator-name = "vcama1";
 	regulator-default-on = <1>; /* 0:skip, 1: off, 2:on */
 	status = "okay";
@@ -514,12 +514,12 @@
 	regulator-default-on = <1>; /* 0:skip, 1: off, 2:on */
 	status = "okay";
 };
-&mt_pmic_vcamd_ldo_reg {
+&mt6358_vcamd_reg {
 	regulator-name = "vcamd";
 	regulator-default-on = <1>; /* 0:skip, 1: off, 2:on */
 	status = "okay";
 };
-&mt_pmic_vcamio_ldo_reg {
+&mt6358_vcamio_reg {
 	regulator-name = "vcamio";
 	regulator-default-on = <1>; /* 0:skip, 1: off, 2:on */
 	status = "okay";
@@ -531,13 +531,13 @@
 };
 
 &kd_camera_hw1 {
-	vcama_sub-supply = <&mt_pmic_vcama1_ldo_reg>;
-	vcama_main2-supply = <&mt_pmic_vcama1_ldo_reg>;
+	vcama_sub-supply = <&mt6358_vcama1_reg>;
+	vcama_main2-supply = <&mt6358_vcama1_reg>;
 	vcama-supply = <&mt_pmic_vcama2_ldo_reg>;
-	vcamd-supply = <&mt_pmic_vcamd_ldo_reg>;
-	vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
-	vcamio_sub-supply = <&mt_pmic_vcamio_ldo_reg>;
-	vcamio_main2-supply = <&mt_pmic_vcamio_ldo_reg>;
+	vcamd-supply = <&mt6358_vcamd_reg>;
+	vcamio-supply = <&mt6358_vcamio_reg>;
+	vcamio_sub-supply = <&mt6358_vcamio_reg>;
+	vcamio_main2-supply = <&mt6358_vcamio_reg>;
 	vcamaf-supply = <&mt_pmic_vldo28_ldo_reg>;
 	vcamaf_sub-supply = <&mt_pmic_vldo28_ldo_reg>;
 	vcamaf_main2-supply = <&mt_pmic_vldo28_ldo_reg>;

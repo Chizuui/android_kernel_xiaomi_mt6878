@@ -41,10 +41,10 @@ long long div_64(long long a, long long b)
  */
 long long get_time_us(void)
 {
-	struct timeval tv;
+	ktime_t tv;
 
-	do_gettimeofday(&tv);
-	return (1000000LL * tv.tv_sec + tv.tv_usec);
+	tv = ktime_get();
+	return ktime_to_us(tv);
 }
 
 /**

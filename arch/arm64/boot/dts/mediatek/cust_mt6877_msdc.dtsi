@@ -24,7 +24,7 @@
 	non-removable;
 	hs400-ds-delay = <0x12814>;
 	mediatek,cqhci;
-	vmmc-supply = <&mt_pmic_vemc_ldo_reg>;
+	vmmc-supply = <&mt6358_vemc_reg>;
 	vcore-supply = <&mt_pmic_vgpu11_buck_reg>;
 
 };
@@ -94,8 +94,8 @@
 	sd-uhs-sdr104;
 	sd-uhs-ddr50;
 	cd-gpios = <&pio 3 GPIO_ACTIVE_LOW>;
-	vmmc-supply = <&mt_pmic_vmch_ldo_reg>;
-	vqmmc-supply = <&mt_pmic_vmc_ldo_reg>;
+	vmmc-supply = <&mt6358_vmch_reg>;
+	vqmmc-supply = <&mt6358_vmc_reg>;
 	no-mmc;
 	no-sdio;
 };

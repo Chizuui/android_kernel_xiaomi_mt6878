@@ -362,7 +362,7 @@
 
 	cam0_vcama-supply = <&fan53870_l3>;
 	cam0_vcama1-supply = <&fan53870_l7>;
-	cam0_vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
+	cam0_vcamio-supply = <&mt6358_vcamio_reg>;
 	cam0_pin_mclk = "mclk";
 	cam0_pin_rst = "gpio";
 	cam0_pin_pnd = "gpio";
@@ -372,7 +372,7 @@
 	cam0_pin_vcamd = "gpio";
 
 	cam1_vcamd-supply = <&fan53870_l2>;
-	cam1_vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
+	cam1_vcamio-supply = <&mt6358_vcamio_reg>;
 	cam1_pin_mclk = "mclk";
 	cam1_pin_pnd = "gpio";
 	cam1_pin_rst = "gpio";
@@ -381,7 +381,7 @@
 	cam1_pin_vcamd = "regulator";
 
 	cam2_vcamd-supply = <&fan53870_l1>;
-	cam2_vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
+	cam2_vcamio-supply = <&mt6358_vcamio_reg>;
 	cam2_pin_mclk = "mclk";
 	cam2_pin_rst = "gpio";
 	cam2_pin_pnd = "gpio";

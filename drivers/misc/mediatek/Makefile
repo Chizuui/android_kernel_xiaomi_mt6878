@@ -193,12 +193,14 @@ obj-$(CONFIG_MTK_SYS_CIRQ) += cirq/
 obj-$(CONFIG_MTK_SECURITY_SW_SUPPORT) += masp/
 obj-y += rps/
 ifeq ($(CONFIG_MACH_MT6768),y)
-obj-y += spi_slave_drv/
+#obj-y += spi_slave_drv  # mt6768 bringup/
 endif
-obj-$(CONFIG_MTK_MT6382_BDG) += spi_slave_drv/
+#obj-$(CONFIG_MTK_MT6382_BDG) += spi_slave_drv/
 obj-$(CONFIG_MTK_SDA) += sda/
 obj-$(CONFIG_MTK_MDDP_SUPPORT) += mddp/
 obj-$(CONFIG_MTK_GATE_IC) += gate_ic/
 obj-$(CONFIG_MTK_FREQ_HOPPING) += freqhopping/
 obj-$(CONFIG_MTK_TASK_TURBO) += task_turbo/
 obj-$(CONFIG_MTK_ULTRASND_PROXIMITY) += elliptic/
+
+obj-$(CONFIG_MACH_MT6768) += mt6768_bringup_stubs.o

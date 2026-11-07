@@ -152,7 +152,7 @@
 					MT6360_OPMODE_LP>;
 			};
 
-			mt_pmic_vmc_ldo_reg: ldo3 {
+			mt6358_vmc_reg: ldo3 {
 				regulator-name = "VMC";
 				regulator-min-microvolt = <1200000>;
 				regulator-max-microvolt = <3600000>;
@@ -160,7 +160,7 @@
 					MT6360_OPMODE_LP>;
 			};
 
-			mt_pmic_vmch_ldo_reg: ldo5 {
+			mt6358_vmch_reg: ldo5 {
 				regulator-name = "VMCH";
 				regulator-min-microvolt = <2700000>;
 				regulator-max-microvolt = <3600000>;

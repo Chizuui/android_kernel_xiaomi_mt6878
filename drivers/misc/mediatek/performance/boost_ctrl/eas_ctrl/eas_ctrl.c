@@ -23,7 +23,7 @@
 #endif
 
 /* boost value */
-static struct mutex boost_eas;
+static DEFINE_MUTEX(boost_eas);
 
 static bool perf_sched_big_task_rotation;
 static pid_t last_cpu_prefer_pid;
@@ -904,7 +904,6 @@ int eas_ctrl_init(struct proc_dir_entry *parent)
 #endif
 	};
 
-	mutex_init(&boost_eas);
 	/* create procfs */
 	for (i = 0; i < ARRAY_SIZE(entries); i++) {
 		if (!proc_create(entries[i].name, 0644,

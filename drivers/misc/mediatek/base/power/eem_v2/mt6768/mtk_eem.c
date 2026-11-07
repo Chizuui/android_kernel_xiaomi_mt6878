@@ -1092,7 +1092,6 @@ static void mt_ptp_lock(unsigned long *flags)
 	eem_pTime_us = eem_get_current_time_us();
 
 }
-EXPORT_SYMBOL(mt_ptp_lock);
 
 static void mt_ptp_unlock(unsigned long *flags)
 {
@@ -1100,7 +1099,6 @@ static void mt_ptp_unlock(unsigned long *flags)
 	EEM_IS_TOO_LONG();
 	spin_unlock_irqrestore(&eem_spinlock, *flags);
 }
-EXPORT_SYMBOL(mt_ptp_unlock);
 
 void mt_record_lock(unsigned long *flags)
 {

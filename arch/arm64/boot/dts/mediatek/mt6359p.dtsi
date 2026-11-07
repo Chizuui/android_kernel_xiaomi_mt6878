@@ -362,7 +362,7 @@
 			regulator-max-microvolt = <1193750>;
 			regulator-enable-ramp-delay = <200>;
 		};
-		mt_pmic_vmodem_buck_reg: buck_vmodem {
+		mt6358_vmodem_reg: buck_vmodem {
 			regulator-name = "vmodem";
 			regulator-min-microvolt = <400000>;
 			regulator-max-microvolt = <1100000>;
@@ -374,7 +374,7 @@
 			regulator-max-microvolt = <1193750>;
 			regulator-enable-ramp-delay = <200>;
 		};
-		mt_pmic_vcore_buck_reg: buck_vcore {
+		mt6358_vcore_reg: buck_vcore {
 			regulator-name = "vcore";
 			regulator-min-microvolt = <506250>;
 			regulator-max-microvolt = <1300000>;
@@ -446,7 +446,7 @@
 			regulator-max-microvolt = <1900000>;
 			regulator-enable-ramp-delay = <960>;
 		};
-		mt_pmic_vcamio_ldo_reg: ldo_vcamio {
+		mt6358_vcamio_reg: ldo_vcamio {
 			regulator-name = "vcamio";
 			regulator-min-microvolt = <1700000>;
 			regulator-max-microvolt = <1900000>;
@@ -524,7 +524,7 @@
 			regulator-max-microvolt = <3300000>;
 			regulator-enable-ramp-delay = <1920>;
 		};
-		mt_pmic_vemc_ldo_reg: ldo_vemc {
+		mt6358_vemc_reg: ldo_vemc {
 			regulator-name = "vemc";
 			regulator-min-microvolt = <2500000>;
 			regulator-max-microvolt = <3300000>;

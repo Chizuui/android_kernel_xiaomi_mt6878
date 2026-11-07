@@ -101,11 +101,15 @@ enum IMGSENSOR_I2C_DEV {
 	IMGSENSOR_I2C_DEV_MAX_NUM,
 };
 
+#ifndef IMGSENSOR_HW_CUSTOM_POWER_INFO_DEFINED
+#define IMGSENSOR_HW_CUSTOM_POWER_INFO_DEFINED
 struct IMGSENSOR_HW_CUSTOM_POWER_INFO {
 	enum IMGSENSOR_HW_ID  id;
 	enum IMGSENSOR_HW_PIN pin;
 };
 
+#ifndef IMGSENSOR_HW_CFG_DEFINED
+#define IMGSENSOR_HW_CFG_DEFINED
 struct IMGSENSOR_HW_CFG {
 	enum   IMGSENSOR_SENSOR_IDX           sensor_idx;
 	enum   IMGSENSOR_I2C_DEV              i2c_dev;
@@ -113,6 +117,8 @@ struct IMGSENSOR_HW_CFG {
 	    pwr_info[IMGSENSOR_HW_POWER_INFO_MAX];
 };
 
+#ifndef IMGSENSOR_HW_POWER_INFO_DEFINED
+#define IMGSENSOR_HW_POWER_INFO_DEFINED
 struct IMGSENSOR_HW_POWER_INFO {
 	enum IMGSENSOR_HW_PIN       pin;
 	enum IMGSENSOR_HW_PIN_STATE pin_state_on;
@@ -120,13 +126,19 @@ struct IMGSENSOR_HW_POWER_INFO {
 	enum IMGSENSOR_HW_PIN_STATE pin_state_off;
 	u32  pin_off_delay;
 };
+#endif
 
+#ifndef IMGSENSOR_HW_POWER_SEQ_DEFINED
+#define IMGSENSOR_HW_POWER_SEQ_DEFINED
 struct IMGSENSOR_HW_POWER_SEQ {
 	char                   *name;
 	struct IMGSENSOR_HW_POWER_INFO pwr_info[IMGSENSOR_HW_POWER_INFO_MAX];
 	u32                    _idx;
 };
+#endif
 
+#ifndef IMGSENSOR_HW_DEVICE_DEFINED
+#define IMGSENSOR_HW_DEVICE_DEFINED
 struct IMGSENSOR_HW_DEVICE {
 	void              *pinstance;
 	enum IMGSENSOR_RETURN (*init)(void *arg);
@@ -147,3 +159,4 @@ extern enum IMGSENSOR_RETURN
 
 #endif
 
+#endif /* __IMGSENSOR_CFG_TABLE_H__ guard fix */

@@ -4,6 +4,7 @@
  */
 
 #include <linux/clk.h>
+#include <linux/ktime.h>
 #include <linux/of_address.h>
 #include <linux/of_platform.h>
 #include <linux/pm_runtime.h>
@@ -150,9 +151,9 @@ void mtk_vdec_hw_break(struct mtk_vcodec_dev *dev, int hw_id)
 	struct mtk_vcodec_ctx *ctx = NULL;
 	int misc_offset[4] = {64, 66, 67, 65};
 
-	struct timeval tv_start;
-	struct timeval tv_end;
-	s32 usec, timeout = 20000;
+	ktime_t tv_start;
+	ktime_t tv_end;
+	s64 usec, timeout = 20000;
 	int offset, idx;
 	unsigned long value;
 	u32 fourcc;
@@ -173,12 +174,11 @@ void mtk_vdec_hw_break(struct mtk_vcodec_dev *dev, int hw_id)
 		writel((readl(vdec_misc_addr + 0x0100) | 0x1),
 			vdec_misc_addr + 0x0100);
 
-		do_gettimeofday(&tv_start);
+		tv_start = ktime_get();
 		cg_status = readl(vdec_misc_addr + 0x0104);
 		while (!((cg_status & 0x1) && (cg_status & 0x10))) {
-			do_gettimeofday(&tv_end);
-			usec = (tv_end.tv_sec - tv_start.tv_sec) * 1000000 +
-			       tv_end.tv_usec - tv_start.tv_usec;
+			tv_end = ktime_get();
+			usec = ktime_us_delta(tv_end, tv_start);
 			if (usec > timeout) {
 				mtk_v4l2_err("VDEC HW break timeout. codec:0x%08x(%c%c%c%c)",
 				    fourcc, fourcc & 0xFF, (fourcc >> 8) & 0xFF,
@@ -214,7 +214,7 @@ void mtk_vdec_hw_break(struct mtk_vcodec_dev *dev, int hw_id)
 					 */
 					break;
 				}
-				do_gettimeofday(&tv_start);
+				tv_start = ktime_get();
 				//smi_debug_bus_hang_detect(0, "VCODEC");
 			}
 			cg_status = readl(vdec_misc_addr + 0x0104);

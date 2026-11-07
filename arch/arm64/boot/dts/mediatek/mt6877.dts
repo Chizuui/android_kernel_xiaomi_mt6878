@@ -2549,7 +2549,7 @@
 		freq-table-hz = <0 0>, <0 0>, <0 0>,
 						<0 0>;
 
-		vcc-supply = <&mt_pmic_vemc_ldo_reg>;
+		vcc-supply = <&mt6358_vemc_reg>;
 
 		resets = <&infracfg_rst 0>, <&infracfg_rst 1>,
 				<&infracfg_rst 2>;
@@ -7354,7 +7354,7 @@
 	regulator-always-on;
 };
 
-&mt_pmic_vemc_ldo_reg {
+&mt6358_vemc_reg {
 	regulator-always-on;
 	regulator-min-microvolt = <3000000>;
 	regulator-max-microvolt = <3000000>;

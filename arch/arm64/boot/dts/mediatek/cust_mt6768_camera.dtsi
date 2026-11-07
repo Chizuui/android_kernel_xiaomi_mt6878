@@ -282,12 +282,12 @@
 	pinctrl-31 = <&camera2_mclk_8mA>;
 
 	cam0_vcama-supply = <&mt_pmic_vcama2_ldo_reg>;
-	cam1_vcama-supply = <&mt_pmic_vcama1_ldo_reg>;
-	cam2_vcama-supply = <&mt_pmic_vcama1_ldo_reg>;
-	cam0_vcamd-supply = <&mt_pmic_vcamd_ldo_reg>;
-	cam0_vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
-	cam1_vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
-	cam2_vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
+	cam1_vcama-supply = <&mt6358_vcama1_reg>;
+	cam2_vcama-supply = <&mt6358_vcama1_reg>;
+	cam0_vcamd-supply = <&mt6358_vcamd_reg>;
+	cam0_vcamio-supply = <&mt6358_vcamio_reg>;
+	cam1_vcamio-supply = <&mt6358_vcamio_reg>;
+	cam2_vcamio-supply = <&mt6358_vcamio_reg>;
 	cam0_vcamaf-supply = <&mt_pmic_vio28_ldo_reg>;
 	status = "okay";
 
@@ -295,7 +295,7 @@
 
 &camera_main_af_mtk {
 	camaf_m1_pmic-supply = <&mt_pmic_vio28_ldo_reg>;
-	camio_m1_pmic-supply = <&mt_pmic_vcamio_ldo_reg>;
+	camio_m1_pmic-supply = <&mt6358_vcamio_reg>;
 	status = "okay";
 };
 

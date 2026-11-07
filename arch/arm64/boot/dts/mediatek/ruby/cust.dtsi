@@ -479,7 +479,7 @@
  * PMIC DTSI File
 *************************/
 
-&mt_pmic_vcamio_ldo_reg {
+&mt6358_vcamio_reg {
 	regulator-name = "vcamio";
 	regulator-default-on = <1>; /* 0:skip, 1: off, 2:on */
 	status = "okay";
@@ -491,7 +491,7 @@
 };
 
 &kd_camera_hw1 {
-	vcamio-supply = <&mt_pmic_vcamio_ldo_reg>;
+	vcamio-supply = <&mt6358_vcamio_reg>;
 	status = "okay";
 };
 
