@@ -844,7 +844,7 @@ void cpuhvfs_pvt_tbl_create(void)
 	int i;
 	unsigned int lv = _mt_cpufreq_get_cpu_level();
 
-	recordRef = ioremap_nocache(DBG_REPO_TBL_S, PVT_TBL_SIZE);
+	recordRef = ioremap(DBG_REPO_TBL_S, PVT_TBL_SIZE);
 	tag_pr_info("DVFS - @(Record)%s----->(%p)\n", __func__, recordRef);
 	memset_io((u8 *)recordRef, 0x00, PVT_TBL_SIZE);
 

@@ -86,10 +86,10 @@ static void __iomem *_golden_io_phys_to_virt(unsigned int addr)
 
 		_g.phy_base = base;
 		_g.io_base =
-			ioremap_nocache(_g.phy_base, REMAP_SIZE_MASK+1);
+			ioremap(_g.phy_base, REMAP_SIZE_MASK+1);
 
 		if (!_g.io_base)
-			pr_err("warning: ioremap_nocache(0x%x, 0x%x)\n",
+			pr_err("warning: ioremap(0x%x, 0x%x)\n",
 					base, REMAP_SIZE_MASK+1);
 	}
 
@@ -305,11 +305,11 @@ unsigned int mt_power_gs_base_remap_init(char *scenario, char *pmic_name,
 			if (!_is_exist_in_phys_to_virt_table(base)) {
 				table[br.table_pos].pa = base;
 				table[br.table_pos].va =
-					ioremap_nocache(base,
+					ioremap(base,
 							REMAP_SIZE_MASK + 1);
 
 				if (!table[br.table_pos].va)
-					pr_err("ioremap_nocache(0x%x, 0x%x)\n",
+					pr_err("ioremap(0x%x, 0x%x)\n",
 						base, REMAP_SIZE_MASK + 1);
 
 				if (br.table_pos < br.table_size)

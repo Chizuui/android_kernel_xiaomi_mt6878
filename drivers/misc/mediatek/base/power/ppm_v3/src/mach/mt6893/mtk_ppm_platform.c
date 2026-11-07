@@ -164,7 +164,7 @@ int ppm_platform_init(void)
 {
 #ifdef PPM_SSPM_SUPPORT
 	/* map sram to update online core */
-	online_core = ioremap_nocache(
+	online_core = ioremap(
 		PPM_ONLINE_CORE_SRAM_ADDR, 4 * NR_PPM_CLUSTERS);
 	if (!online_core) {
 		ppm_err("remap online_core failed!\n");

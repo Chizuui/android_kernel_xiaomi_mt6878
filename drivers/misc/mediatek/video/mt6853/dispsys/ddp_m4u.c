@@ -349,7 +349,7 @@ int disp_hal_allocate_framebuffer(phys_addr_t pa_start, phys_addr_t pa_end,
 {
 	int ret = 0;
 
-	*va = (unsigned long)ioremap_nocache(pa_start, pa_end - pa_start + 1);
+	*va = (unsigned long)ioremap(pa_start, pa_end - pa_start + 1);
 	pr_info("disphal_allocate_fb, pa_start=0x%pa, pa_end=0x%pa, va=0x%lx\n",
 		&pa_start, &pa_end, *va);
 
@@ -390,7 +390,7 @@ int disp_hal_allocate_framebuffer(phys_addr_t pa_start, phys_addr_t pa_end,
 int disp_hal_allocate_framebuffer(phys_addr_t pa_start, phys_addr_t pa_end,
 				  unsigned long *va, unsigned long *mva)
 {
-	*va = (unsigned long)ioremap_nocache(pa_start, pa_end - pa_start + 1);
+	*va = (unsigned long)ioremap(pa_start, pa_end - pa_start + 1);
 	pr_info("disphal_allocate_fb, pa_start=0x%pa, pa_end=0x%pa, va=0x%lx\n",
 		&pa_start, &pa_end, *va);
 

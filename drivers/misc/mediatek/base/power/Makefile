@@ -19,7 +19,6 @@ obj-$(CONFIG_MACH_MT6761) += spm/
 obj-$(CONFIG_MACH_MT6768) += spm/
 obj-$(CONFIG_MACH_MT6768) += upower_v2/
 obj-$(CONFIG_MACH_MT6877) += upower_v2/
-obj-$(CONFIG_MACH_MT6768) += mcdi/
 obj-$(CONFIG_MACH_MT6768) += cpuidle_v3/
 obj-$(CONFIG_MACH_MT6779) += spm/
 obj-$(CONFIG_MACH_MT6785) += spm/
@@ -163,7 +162,6 @@ obj-$(CONFIG_MACH_MT6739) += mcdi/
 obj-$(CONFIG_MACH_MT6765) += mcdi/
 obj-$(CONFIG_MACH_MT6761) += mcdi/
 obj-$(CONFIG_MACH_MT6779) += mcdi/
-obj-$(CONFIG_MACH_MT6768) += mcdi/
 obj-$(CONFIG_MACH_MT6785) += mcdi/
 obj-$(CONFIG_MACH_MT6771) += mcdi/
 ifeq ($(CONFIG_MTK_CM_MGR_LEGACY), y)

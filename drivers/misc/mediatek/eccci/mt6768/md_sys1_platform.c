@@ -207,7 +207,7 @@ int md_cd_get_modem_hw_info(struct platform_device *dev_ptr,
 			irq_of_parse_and_map(dev_ptr->dev.of_node, 3);
 
 		hw_info->md_pcore_pccif_base =
-			ioremap_nocache(MD_PCORE_PCCIF_BASE, 0x20);
+			ioremap(MD_PCORE_PCCIF_BASE, 0x20);
 		CCCI_BOOTUP_LOG(dev_cfg->index, TAG,
 			"pccif:%x\n", MD_PCORE_PCCIF_BASE);
 
@@ -232,7 +232,7 @@ int md_cd_get_modem_hw_info(struct platform_device *dev_ptr,
 			md_cd_plat_val_ptr.infra_ao_base = of_iomap(node_infrao, 0);
 		else
 			md_cd_plat_val_ptr.infra_ao_base =
-				ioremap_nocache(0x10001000 , 0x1000);
+				ioremap(0x10001000 , 0x1000);
 
 		hw_info->plat_ptr = &md_cd_plat_ptr;
 		hw_info->plat_val = &md_cd_plat_val_ptr;
@@ -266,7 +266,7 @@ int md_cd_get_modem_hw_info(struct platform_device *dev_ptr,
 		if (node)
 			hw_info->ap_mixed_base = (unsigned long)of_iomap(node, 0);
 		else
-			hw_info->ap_mixed_base = (unsigned long)ioremap_nocache(0x1000c000, 0x1000);
+			hw_info->ap_mixed_base = (unsigned long)ioremap(0x1000c000, 0x1000);
 		if (!hw_info->ap_mixed_base) {
 			CCCI_ERROR_LOG(-1, TAG,
 				"%s: hw_info->ap_mixed_base of_iomap failed\n",
@@ -280,7 +280,7 @@ int md_cd_get_modem_hw_info(struct platform_device *dev_ptr,
 			hw_info->ap_topclkgen_base = of_iomap(node, 0);
 		else
 			hw_info->ap_topclkgen_base =
-				ioremap_nocache(0x10000000, 4);
+				ioremap(0x10000000, 4);
 		if (!hw_info->ap_topclkgen_base) {
 			CCCI_ERROR_LOG(-1, TAG,
 			"%s:ioremap topclkgen base address fail\n", __func__);
@@ -343,11 +343,11 @@ static int md_cd_io_remap_md_side_register(struct ccci_modem *md)
 	struct md_pll_reg *md_reg;
 	struct md_sys1_info *md_info = (struct md_sys1_info *)md->private_data;
 
-	md_info->md_boot_slave_En = ioremap_nocache(
+	md_info->md_boot_slave_En = ioremap(
 		md->hw_info->md_boot_slave_En, 0x4);
-	md_info->md_rgu_base = ioremap_nocache(
+	md_info->md_rgu_base = ioremap(
 		md->hw_info->md_rgu_base, 0x300);
-	md_info->md_global_con0 = ioremap_nocache(MD_GLOBAL_CON0, 0x4);
+	md_info->md_global_con0 = ioremap(MD_GLOBAL_CON0, 0x4);
 
 
 	md_reg = kzalloc(sizeof(struct md_pll_reg), GFP_KERNEL);
@@ -357,24 +357,24 @@ static int md_cd_io_remap_md_side_register(struct ccci_modem *md)
 		return -1;
 	}
 	/*needed by bootup flow start*/
-	md_reg->md_top_Pll = ioremap_nocache(MDTOP_PLLMIXED_BASE,
+	md_reg->md_top_Pll = ioremap(MDTOP_PLLMIXED_BASE,
 		MDTOP_PLLMIXED_LENGTH);
-	md_reg->md_top_clkSW = ioremap_nocache(MDTOP_CLKSW_BASE,
+	md_reg->md_top_clkSW = ioremap(MDTOP_CLKSW_BASE,
 		MDTOP_CLKSW_LENGTH);
 	/*needed by bootup flow end*/
 
-	md_reg->md_boot_stats0 = ioremap_nocache(MD1_CFG_BOOT_STATS0, 4);
-	md_reg->md_boot_stats1 = ioremap_nocache(MD1_CFG_BOOT_STATS1, 4);
+	md_reg->md_boot_stats0 = ioremap(MD1_CFG_BOOT_STATS0, 4);
+	md_reg->md_boot_stats1 = ioremap(MD1_CFG_BOOT_STATS1, 4);
 	/*just for dump end*/
 
 	md_info->md_pll_base = md_reg;
 
 	md_sram_pd_psmcusys_base =
-		ioremap_nocache(MD_SRAM_PD_PSMCUSYS_SRAM_BASE,
+		ioremap(MD_SRAM_PD_PSMCUSYS_SRAM_BASE,
 			MD_SRAM_PD_PSMCUSYS_SRAM_LEN);
 
 #ifdef MD_PEER_WAKEUP
-	md_info->md_peer_wakeup = ioremap_nocache(MD_PEER_WAKEUP, 0x4);
+	md_info->md_peer_wakeup = ioremap(MD_PEER_WAKEUP, 0x4);
 #endif
 	return 0;
 }
@@ -514,7 +514,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 	/* 1. pre-action */
 	if (per_md_data->md_dbg_dump_flag &
 		(MD_DBG_DUMP_ALL & ~(1 << MD_DBG_DUMP_SMEM))) {
-		dump_reg0 = ioremap_nocache(MD1_OPEN_DEBUG_APB_CLK, 0x1000);
+		dump_reg0 = ioremap(MD1_OPEN_DEBUG_APB_CLK, 0x1000);
 		ccci_write32(dump_reg0, 0x430, 0x1);
 		udelay(1000);
 		CCCI_MEM_LOG_TAG(md->index, TAG, "md_dbg_sys:0x%X\n",
@@ -531,7 +531,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 		CCCI_MEM_LOG_TAG(md->index, TAG, "common: 0x%X\n",
 			(MD_PC_MONITOR_BASE + 0x800));
 		/* Stop all PCMon */
-		dump_reg0 = ioremap_nocache(MD_PC_MONITOR_BASE,
+		dump_reg0 = ioremap(MD_PC_MONITOR_BASE,
 			MD_PC_MONITOR_LEN);
 		mdreg_write32(MD_REG_PC_MONITOR, 0x22); /* stop MD PCMon */
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -562,7 +562,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 		"CLKSW: [0]0x%X, [1]0x%X, [2]0x%X\n",
 			MD_CLKSW_BASE, (MD_CLKSW_BASE + 0x100),
 			(MD_CLKSW_BASE + 0xF00));
-		dump_reg0 = ioremap_nocache(MD_CLKSW_BASE, MD_CLKSW_LEN);
+		dump_reg0 = ioremap(MD_CLKSW_BASE, MD_CLKSW_LEN);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, 0xD4);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -582,7 +582,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 			(MD_PLL_MIXED_BASE + 0xC00),
 			(MD_PLL_MIXED_BASE + 0xD00),
 			(MD_PLL_MIXED_BASE + 0xF00));
-		dump_reg0 = ioremap_nocache(MD_PLL_MIXED_BASE,
+		dump_reg0 = ioremap(MD_PLL_MIXED_BASE,
 			MD_PLL_MIXED_LEN);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, 0x68);
@@ -608,7 +608,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 		/* MD CLKCTL */
 		CCCI_MEM_LOG_TAG(md->index, TAG, "CLKCTL: [0]0x%X, [1]0x%X\n",
 			MD_CLKCTL_BASE, (MD_CLKCTL_BASE + 0x110));
-		dump_reg0 = ioremap_nocache(MD_CLKCTL_BASE, MD_CLKCTL_LEN);
+		dump_reg0 = ioremap(MD_CLKCTL_BASE, MD_CLKCTL_LEN);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, 0x1C);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -625,7 +625,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 			(MD_GLOBALCON_BASE + 0xC00),
 			(MD_GLOBALCON_BASE + 0xD00),
 			(MD_GLOBALCON_BASE + 0xF00));
-		dump_reg0 = ioremap_nocache(MD_GLOBALCON_BASE,
+		dump_reg0 = ioremap(MD_GLOBALCON_BASE,
 			MD_GLOBALCON_LEN);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, 0xA0);
@@ -654,19 +654,19 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 			"Dump MD Bus status: [0]0x%X, [1]0x%X, [2]0x%X, [3]0x%X\n",
 			MD_BUS_REG_BASE0, MD_BUS_REG_BASE1, MD_BUS_REG_BASE2,
 			MD_BUS_REG_BASE3);
-		dump_reg0 = ioremap_nocache(MD_BUS_REG_BASE0, MD_BUS_REG_LEN0);
+		dump_reg0 = ioremap(MD_BUS_REG_BASE0, MD_BUS_REG_LEN0);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP, dump_reg0,
 			MD_BUS_REG_LEN0);
 		iounmap(dump_reg0);
-		dump_reg0 = ioremap_nocache(MD_BUS_REG_BASE1, MD_BUS_REG_LEN1);
+		dump_reg0 = ioremap(MD_BUS_REG_BASE1, MD_BUS_REG_LEN1);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP, dump_reg0,
 			MD_BUS_REG_LEN1);
 		iounmap(dump_reg0);
-		dump_reg0 = ioremap_nocache(MD_BUS_REG_BASE2, MD_BUS_REG_LEN2);
+		dump_reg0 = ioremap(MD_BUS_REG_BASE2, MD_BUS_REG_LEN2);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, MD_BUS_REG_LEN2);
 		iounmap(dump_reg0);
-		dump_reg0 = ioremap_nocache(MD_BUS_REG_BASE3, MD_BUS_REG_LEN3);
+		dump_reg0 = ioremap(MD_BUS_REG_BASE3, MD_BUS_REG_LEN3);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, MD_BUS_REG_LEN3);
 		iounmap(dump_reg0);
@@ -677,7 +677,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 		CCCI_MEM_LOG_TAG(md->index, TAG,
 			"Dump MD Bus REC: [0]0x%X, [1]0x%X\n",
 			MD_MCU_MO_BUSREC_BASE, MD_INFRA_BUSREC_BASE);
-		dump_reg0 = ioremap_nocache(MD_MCU_MO_BUSREC_BASE,
+		dump_reg0 = ioremap(MD_MCU_MO_BUSREC_BASE,
 			MD_MCU_MO_BUSREC_LEN);
 		mdreg_write32(MD_REG_MDMCU_BUSMON, 0x0); /* stop */
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -694,7 +694,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 			(dump_reg0 + 0x700), 0x51C);
 		mdreg_write32(MD_REG_MDMCU_BUSMON, 0x1); /* re-start */
 		iounmap(dump_reg0);
-		dump_reg0 = ioremap_nocache(MD_INFRA_BUSREC_BASE,
+		dump_reg0 = ioremap(MD_INFRA_BUSREC_BASE,
 			MD_INFRA_BUSREC_LEN);
 		mdreg_write32(MD_REG_MDINFRA_BUSMON, 0x0); /* stop */
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -719,15 +719,15 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 			"Dump MD ECT: [0]0x%X, [1]0x%X, [2]0x%X, [3]0x%X\n",
 			MD_ECT_REG_BASE0, MD_ECT_REG_BASE1,
 			(MD_ECT_REG_BASE2 + 0x14), (MD_ECT_REG_BASE2 + 0x0C));
-		dump_reg0 = ioremap_nocache(MD_ECT_REG_BASE0, MD_ECT_REG_LEN0);
+		dump_reg0 = ioremap(MD_ECT_REG_BASE0, MD_ECT_REG_LEN0);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP, dump_reg0,
 			MD_ECT_REG_LEN0);
 		iounmap(dump_reg0);
-		dump_reg0 = ioremap_nocache(MD_ECT_REG_BASE1, MD_ECT_REG_LEN1);
+		dump_reg0 = ioremap(MD_ECT_REG_BASE1, MD_ECT_REG_LEN1);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP, dump_reg0,
 			MD_ECT_REG_LEN1);
 		iounmap(dump_reg0);
-		dump_reg0 = ioremap_nocache(MD_ECT_REG_BASE2, MD_ECT_REG_LEN2);
+		dump_reg0 = ioremap(MD_ECT_REG_BASE2, MD_ECT_REG_LEN2);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			(dump_reg0 + 0x14), 0x4);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -770,7 +770,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 	if (per_md_data->md_dbg_dump_flag & (1 << MD_DBG_DUMP_TOPSM)) {
 		CCCI_MEM_LOG_TAG(md->index, TAG,
 			"Dump MD TOPSM status: 0x%X\n", MD_TOPSM_REG_BASE);
-		dump_reg0 = ioremap_nocache(MD_TOPSM_REG_BASE,
+		dump_reg0 = ioremap(MD_TOPSM_REG_BASE,
 			MD_TOPSM_REG_LEN);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP, dump_reg0,
 			MD_TOPSM_REG_LEN);
@@ -782,7 +782,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 		CCCI_MEM_LOG_TAG(md->index, TAG,
 			"Dump MD RGU: [0]0x%X, [1]0x%X\n",
 			MD_RGU_REG_BASE, (MD_RGU_REG_BASE + 0x200));
-		dump_reg0 = ioremap_nocache(MD_RGU_REG_BASE, MD_RGU_REG_LEN);
+		dump_reg0 = ioremap(MD_RGU_REG_BASE, MD_RGU_REG_LEN);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, 0xCC);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -795,7 +795,7 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 		CCCI_MEM_LOG_TAG(md->index, TAG,
 			"Dump MD OST status: [0]0x%X, [1]0x%X\n",
 			MD_OST_STATUS_BASE, (MD_OST_STATUS_BASE + 0x200));
-		dump_reg0 = ioremap_nocache(MD_OST_STATUS_BASE, 0x300);
+		dump_reg0 = ioremap(MD_OST_STATUS_BASE, 0x300);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, 0xF0);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
@@ -804,14 +804,14 @@ void md_cd_dump_debug_register(struct ccci_modem *md)
 		/* 9 CSC */
 		CCCI_MEM_LOG_TAG(md->index, TAG, "Dump MD CSC: 0x%X\n",
 		MD_CSC_REG_BASE);
-		dump_reg0 = ioremap_nocache(MD_CSC_REG_BASE, MD_CSC_REG_LEN);
+		dump_reg0 = ioremap(MD_CSC_REG_BASE, MD_CSC_REG_LEN);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP, dump_reg0,
 			MD_CSC_REG_LEN);
 		iounmap(dump_reg0);
 		/* 10 ELM */
 		CCCI_MEM_LOG_TAG(md->index, TAG, "Dump MD ELM: 0x%X\n",
 		MD_ELM_REG_BASE);
-		dump_reg0 = ioremap_nocache(MD_ELM_REG_BASE, 0x480);
+		dump_reg0 = ioremap(MD_ELM_REG_BASE, 0x480);
 		ccci_util_mem_dump(md->index, CCCI_DUMP_MEM_DUMP,
 			dump_reg0, 0x480);
 		iounmap(dump_reg0);

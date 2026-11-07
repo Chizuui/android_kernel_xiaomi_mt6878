@@ -2576,7 +2576,7 @@ static int mtkfb_probe(struct platform_device *pdev)
 
 #if 0/*#ifdef CONFIG_MTK_IOMMU_V3*/
 /* TODO : this section lack of ion allocate API */
-	temp_va = (size_t)ioremap_nocache(fb_base,
+	temp_va = (size_t)ioremap(fb_base,
 		(fb_base + vramsize - fb_base));
 	fbdev->fb_va_base = (void *)temp_va;
 	ion_display_client = disp_ion_create("disp_fb0");

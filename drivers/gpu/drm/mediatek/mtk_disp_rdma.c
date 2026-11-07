@@ -481,7 +481,7 @@ void mtk_rdma_cal_golden_setting(struct mtk_ddp_comp *comp,
 #endif
 #if defined(CONFIG_MACH_MT6873) || defined(CONFIG_MACH_MT6853) \
 	|| defined(CONFIG_MACH_MT6833) || defined(CONFIG_MACH_MT6877) \
-	|| defined(CONFIG_MACH_MT6781)
+	|| defined(CONFIG_MACH_MT6781) || defined(CONFIG_MACH_MT6768)
 	unsigned int pre_ultra_low_us = 250, pre_ultra_high_us = 260;
 	unsigned int ultra_low_us = 230, ultra_high_us = 250;
 	unsigned int urgent_low_us = 110, urgent_high_us = 120;

@@ -64,11 +64,11 @@ unsigned int mt_power_gs_base_remap_init(char *scenario, char *pmic_name,
 			if (!_is_exist_in_phys_to_virt_table(base)) {
 				table[br.table_pos].pa = base;
 				table[br.table_pos].va =
-					ioremap_nocache(base,
+					ioremap(base,
 							REMAP_SIZE_MASK + 1);
 
 				if (!table[br.table_pos].va)
-					pr_info("ioremap_nocache(0x%x, 0x%x)\n",
+					pr_info("ioremap(0x%x, 0x%x)\n",
 						base, REMAP_SIZE_MASK + 1);
 
 				if (br.table_pos < br.table_size)
@@ -109,7 +109,7 @@ unsigned int _golden_read_reg(unsigned int addr)
 		reg_val = gs_pmic_read(addr);
 	else {
 #if 0
-		io_base = ioremap_nocache(base, REMAP_SIZE_MASK+1);
+		io_base = ioremap(base, REMAP_SIZE_MASK+1);
 		reg_val = ioread32(io_base + offset);
 		iounmap(io_base);
 #else

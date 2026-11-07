@@ -5384,8 +5384,8 @@ void mtk_ddp_add_comp_to_path_with_cmdq(struct mtk_drm_crtc *mtk_crtc,
 					enum mtk_ddp_comp_id next,
 					struct cmdq_pkt *handle)
 {
-	unsigned int addr;
-	int value;
+	unsigned int addr __maybe_unused;
+	int value __maybe_unused;
 	struct mtk_drm_private *priv = mtk_crtc->base.dev->dev_private;
 
 	switch (priv->data->mmsys_id) {
@@ -5592,8 +5592,8 @@ void mtk_ddp_remove_comp_from_path(void __iomem *config_regs,
 				   enum mtk_ddp_comp_id cur,
 				   enum mtk_ddp_comp_id next)
 {
-	unsigned int addr, reg;
-	int value;
+	unsigned int addr __maybe_unused, reg __maybe_unused;
+	int value __maybe_unused;
 
 #if defined(CONFIG_MACH_MT6885) || defined(CONFIG_MACH_MT6893)
 	value = mtk_ddp_mout_en_MT6885(reg_data, cur, next, &addr);
@@ -5687,8 +5687,8 @@ void mtk_ddp_remove_comp_from_path_with_cmdq(struct mtk_drm_crtc *mtk_crtc,
 					     enum mtk_ddp_comp_id next,
 					     struct cmdq_pkt *handle)
 {
-	unsigned int addr;
-	int value;
+	unsigned int addr __maybe_unused;
+	int value __maybe_unused;
 
 #if defined(CONFIG_MACH_MT6885) || defined(CONFIG_MACH_MT6893)
 	value = mtk_ddp_mout_en_MT6885(mtk_crtc->mmsys_reg_data,

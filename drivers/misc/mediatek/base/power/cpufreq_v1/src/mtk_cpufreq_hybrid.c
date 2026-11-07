@@ -1707,7 +1707,7 @@ void __init cpuhvfs_pvt_tbl_create(void)
 #endif
 
 	lv = _mt_cpufreq_get_cpu_level();
-	recordRef = ioremap_nocache(DBG_REPO_TBL_S, PVT_TBL_SIZE);
+	recordRef = ioremap(DBG_REPO_TBL_S, PVT_TBL_SIZE);
 	tag_pr_info("DVFS - @(Record)%s----->(%p)\n", __func__, recordRef);
 	memset_io((u8 *)recordRef, 0x00, PVT_TBL_SIZE);
 
@@ -1807,7 +1807,7 @@ void __init cpuhvfs_pvt_tbl_create(void)
 	mb(); /* SRAM writing */
 
 #ifdef CCI_MAP_TBL_SUPPORT
-	record_CCI_Ref = ioremap_nocache(DBG_REPO_CCI_TBL_S, PVT_CCI_TBL_SIZE);
+	record_CCI_Ref = ioremap(DBG_REPO_CCI_TBL_S, PVT_CCI_TBL_SIZE);
 	tag_pr_info("DVFS - @(Record)%s----->(%p)\n", __func__, record_CCI_Ref);
 	memset_io((u8 *)record_CCI_Ref, 0x00, PVT_CCI_TBL_SIZE);
 
@@ -1831,7 +1831,7 @@ void __init cpuhvfs_pvt_tbl_create(void)
 	if (ret)
 		tag_pr_info(" %s Cant find imax state node\n", __func__);
 #endif
-	record_IMAX_Ref = ioremap_nocache(DBG_REPO_IMAX_TBL_S,
+	record_IMAX_Ref = ioremap(DBG_REPO_IMAX_TBL_S,
 			PVT_IMAX_TBL_SIZE);
 	tag_pr_info("DVFS - @(IMAX Record)%s----->(%p)\n", __func__,
 			record_IMAX_Ref);

@@ -912,7 +912,7 @@ void ppm_cobra_init(void)
 
 #ifdef PPM_SSPM_SUPPORT
 	/* remap sram for cobra */
-	cobra_tbl = ioremap_nocache(PPM_COBRA_TBL_SRAM_ADDR,
+	cobra_tbl = ioremap(PPM_COBRA_TBL_SRAM_ADDR,
 					PPM_COBRA_TBL_SRAM_SIZE);
 #else
 	cobra_tbl = kzalloc(sizeof(struct ppm_cobra_data), GFP_KERNEL);

@@ -373,7 +373,7 @@ static void mtk_wdma_calc_golden_setting(struct golden_setting_context *gsc,
 #endif
 #if defined(CONFIG_MACH_MT6873) || defined(CONFIG_MACH_MT6853) \
 	|| defined(CONFIG_MACH_MT6833) \
-	|| defined(CONFIG_MACH_MT6877)
+	|| defined(CONFIG_MACH_MT6877) || defined(CONFIG_MACH_MT6768)
 	unsigned int fifo_size = 578;
 	unsigned int fifo_size_uv = 29;
 #endif
@@ -416,7 +416,7 @@ static void mtk_wdma_calc_golden_setting(struct golden_setting_context *gsc,
 #endif
 #if defined(CONFIG_MACH_MT6873) || defined(CONFIG_MACH_MT6853) \
 	|| defined(CONFIG_MACH_MT6833) || defined(CONFIG_MACH_MT6877) \
-	|| defined(CONFIG_MACH_MT6781)
+	|| defined(CONFIG_MACH_MT6781) || defined(CONFIG_MACH_MT6768)
 		fifo_size = 402;
 		fifo_size_uv = 99;
 #endif
@@ -435,7 +435,7 @@ static void mtk_wdma_calc_golden_setting(struct golden_setting_context *gsc,
 #endif
 #if defined(CONFIG_MACH_MT6873) || defined(CONFIG_MACH_MT6853) \
 	|| defined(CONFIG_MACH_MT6833) || defined(CONFIG_MACH_MT6877) \
-	|| defined(CONFIG_MACH_MT6781)
+	|| defined(CONFIG_MACH_MT6781) || defined(CONFIG_MACH_MT6768)
 		fifo_size = 402;
 		fifo_size_uv = 201;
 #endif

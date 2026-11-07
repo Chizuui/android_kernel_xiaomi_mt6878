@@ -498,7 +498,7 @@ static int mdla_probe(struct platform_device *pdev)
 		return -ENODEV;
 	}
 
-	apu_mdla_config_top = ioremap_nocache(apu_mdla_config->start,
+	apu_mdla_config_top = ioremap(apu_mdla_config->start,
 			apu_mdla_config->end - apu_mdla_config->start + 1);
 	if (!apu_mdla_config_top) {
 		dev_info(dev, "mtk_mdla: Could not allocate iomem\n");
@@ -506,7 +506,7 @@ static int mdla_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	apu_mdla_cmde_mreg_top = ioremap_nocache(apu_mdla_command->start,
+	apu_mdla_cmde_mreg_top = ioremap(apu_mdla_command->start,
 			apu_mdla_command->end - apu_mdla_command->start + 1);
 	if (!apu_mdla_cmde_mreg_top) {
 		dev_info(dev, "mtk_mdla: Could not allocate iomem\n");
@@ -514,7 +514,7 @@ static int mdla_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	apu_mdla_biu_top = ioremap_nocache(apu_mdla_biu->start,
+	apu_mdla_biu_top = ioremap(apu_mdla_biu->start,
 			apu_mdla_biu->end - apu_mdla_biu->start + 1);
 	if (!apu_mdla_biu_top) {
 		dev_info(dev, "mtk_mdla: Could not allocate iomem\n");
@@ -522,7 +522,7 @@ static int mdla_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	apu_mdla_gsm_top = ioremap_nocache(apu_mdla_gsm->start,
+	apu_mdla_gsm_top = ioremap(apu_mdla_gsm->start,
 			apu_mdla_gsm->end - apu_mdla_gsm->start + 1);
 	if (!apu_mdla_gsm_top) {
 		dev_info(dev, "mtk_mdla: Could not allocate iomem\n");
@@ -533,7 +533,7 @@ static int mdla_probe(struct platform_device *pdev)
 	pr_info("%s: apu_mdla_gsm_top: %p, apu_mdla_gsm_base: %p\n",
 		__func__, apu_mdla_gsm_top, apu_mdla_gsm_base);
 
-	apu_conn_top = ioremap_nocache(apu_conn->start,
+	apu_conn_top = ioremap(apu_conn->start,
 			apu_conn->end - apu_conn->start + 1);
 	if (!apu_conn_top) {
 		mdla_drv_debug("mtk_mdla: Could not allocate apu_conn_top\n");
@@ -541,7 +541,7 @@ static int mdla_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	infracfg_ao_top = ioremap_nocache(infracfg_ao->start,
+	infracfg_ao_top = ioremap(infracfg_ao->start,
 			infracfg_ao->end - infracfg_ao->start + 1);
 	if (!infracfg_ao_top) {
 		mdla_drv_debug("mtk_mdla: Could not allocate infracfg_ao_top\n");

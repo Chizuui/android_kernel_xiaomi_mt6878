@@ -658,7 +658,7 @@ phys_addr_t mtkfb_get_fb_base(void)
 int mtkfb_allocate_framebuffer(phys_addr_t pa_start, phys_addr_t pa_end,
 				unsigned long *va, unsigned long *mva)
 {
-	*va = (unsigned long)ioremap_nocache(pa_start, pa_end - pa_start + 1);
+	*va = (unsigned long)ioremap(pa_start, pa_end - pa_start + 1);
 	pr_info("disphal_allocate_fb, pa=%pa, va=0x%08lx\n", &pa_start, *va);
 	{
 		*mva = pa_start & 0xffffffffULL;
