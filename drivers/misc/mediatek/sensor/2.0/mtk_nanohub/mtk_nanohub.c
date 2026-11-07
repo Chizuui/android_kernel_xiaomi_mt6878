@@ -180,6 +180,15 @@ phys_addr_t __attribute__((weak))
 void __attribute__((weak)) scp_register_feature(enum feature_id id)
 {
 }
+void __attribute__((weak)) scp_register_sensor(enum feature_id id,
+		enum scp_sensor_id sensor_id)
+{
+}
+
+void __attribute__((weak)) scp_deregister_sensor(enum feature_id id,
+		enum scp_sensor_id sensor_id)
+{
+}
 
 /* arch counter is 13M, mult is 161319385, shift is 21 */
 static inline uint64_t arch_counter_to_ns(uint64_t cyc)
