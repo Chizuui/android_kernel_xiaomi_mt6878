@@ -11,13 +11,27 @@
 
 #define PMIC_BASE (0x0)
 
+#ifndef MT6358_TOP0_ID
 #define MT6358_TOP0_ID ((unsigned int)(PMIC_BASE+0x0))
+#endif
+#ifndef MT6358_TOP0_REV0
 #define MT6358_TOP0_REV0 ((unsigned int)(PMIC_BASE+0x2))
+#endif
+#ifndef MT6358_TOP0_DSN_DBI
 #define MT6358_TOP0_DSN_DBI  ((unsigned int)(PMIC_BASE+0x4))
+#endif
+#ifndef MT6358_TOP0_DSN_DXI
 #define MT6358_TOP0_DSN_DXI  ((unsigned int)(PMIC_BASE+0x6))
+#endif
+#ifndef MT6358_HWCID
 #define MT6358_HWCID   ((unsigned int)(PMIC_BASE+0x8))
+#endif
+#ifndef MT6358_SWCID
 #define MT6358_SWCID   ((unsigned int)(PMIC_BASE+0xa))
+#endif
+#ifndef MT6358_PONSTS
 #define MT6358_PONSTS  ((unsigned int)(PMIC_BASE+0xc))
+#endif
 #define MT6358_POFFSTS ((unsigned int)(PMIC_BASE+0xe))
 #define MT6358_PSTSCTL ((unsigned int)(PMIC_BASE+0x10))
 #define MT6358_PG_DEB_STS0   ((unsigned int)(PMIC_BASE+0x12))

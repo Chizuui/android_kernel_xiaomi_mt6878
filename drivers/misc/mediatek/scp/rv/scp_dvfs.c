@@ -14,7 +14,11 @@
 #include <linux/jiffies.h>
 #include <linux/kernel.h>
 #include <linux/ktime.h>
-#include <linux/mfd/mt6359p/registers.h>
+/*
+ * The PMIC register headers are pulled in through mtk_pmic_api_buck.h /
+ * mtk_pmic_info.h below. Including the MFD header here as well made the
+ * MT6358 register macros collide with mach/upmu_hw.h.
+ */
 #include <linux/mfd/syscon.h>
 #include <linux/miscdevice.h>
 #include <linux/module.h>

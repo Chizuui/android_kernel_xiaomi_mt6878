@@ -21,7 +21,7 @@
 #include <linux/mfd/mt6359/registers.h>
 #elif defined(CONFIG_MTK_PMIC_CHIP_MT6359P)
 #include <linux/mfd/mt6359p/irq.h>
-#include <linux/mfd/mt6359p/registers.h>
+#include <linux/mfd/mt6358/registers.h>
 #elif defined(CONFIG_MTK_PMIC_CHIP_MT6390)
 #include <linux/mfd/mt6390/irq.h>
 #include <linux/mfd/mt6390/registers.h>
