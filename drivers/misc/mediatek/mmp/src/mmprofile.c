@@ -33,6 +33,7 @@
 #include <linux/debugfs.h>
 
 #include <linux/ftrace.h>
+#include <linux/kallsyms.h>
 #include <linux/trace_events.h>
 #include <linux/bug.h>
 #ifdef CONFIG_MTK_AEE_FEATURE
@@ -726,7 +727,7 @@ static inline void __mt_update_tracing_mark_write_addr(void)
 {
 	if (unlikely(tracing_mark_write_addr == 0))
 		tracing_mark_write_addr =
-			mtk_kallsyms_lookup_name("tracing_mark_write");
+			kallsyms_lookup_name("tracing_mark_write");
 }
 
 static inline void mmp_kernel_trace_begin(char *name)

@@ -556,7 +556,7 @@ void base_ops_disable_locked(struct eem_det *det, int reason)
 
 		/* Clear EEM interrupt EEMINTSTS */
 		eem_write(EEMINTSTS, 0x00ffffff);
-		__attribute__((fallthrough));
+		fallthrough;
 
 	case BY_PROCFS: /* 1 */
 		det->disabled |= reason;
