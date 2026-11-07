@@ -1180,6 +1180,11 @@ static void mtk_charger_parse_cmdline(void)
 	char *ruby = NULL, *rubypro = NULL, *rubyplus = NULL;
 	const char *sku = get_hw_sku();
 
+	if (!sku) {
+	pr_info("hardware SKU unavailable; using default charger profile\n");
+		return;
+	}
+
 	ruby = strnstr(sku, "ruby", strlen(sku));
 	rubypro = strnstr(sku, "rubypro", strlen(sku));
 	rubyplus = strnstr(sku, "rubyplus", strlen(sku));

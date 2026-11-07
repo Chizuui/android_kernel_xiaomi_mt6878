@@ -2138,6 +2138,11 @@ static int __init CCU_INIT(void)
 
 #if defined(CCU_QOS_SUPPORT_ENABLE) && !defined(CONFIG_MACH_MT6877)
 	/*Call pm_qos_add_request when initialize module or driver prob*/
+	if (!g_ccu_device->dev) {
+	LOG_ERR("CCU device probe did not create device; skip QoS OPP setup\n");
+		goto qos_init_done;
+	}
+
 	ret = dev_pm_opp_of_add_table(g_ccu_device->dev);
 	if (ret) {
 		LOG_ERR("failed to add OPP table: %d\n", ret);
