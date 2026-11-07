@@ -42,12 +42,17 @@ subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/audio_ipi/common_v2/frame
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/audio_ipi/common_v2/tasks/audplayback/
 endif
 subdir-ccflags-y += -I$(srctree)/sound/soc/mediatek/common
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat
 subdir-ccflags-y += -I$(srctree)/sound/soc/mediatek/$(MTK_PLATFORM)/
 endif
 
 # adsp driver path — mt6877 has no adsp platform dir; use mt6853 (same family)
 ADSP_PLATFORM := $(MTK_PLATFORM)
 ifeq ($(ADSP_PLATFORM),mt6877)
+ADSP_PLATFORM := mt6853
+endif
+ifeq ($(ADSP_PLATFORM),mt6768)
 ADSP_PLATFORM := mt6853
 endif
 ifeq ($(CONFIG_MTK_AUDIODSP_SUPPORT),y)
@@ -60,7 +65,10 @@ endif
 
 # platform code — only include if MTK_PLATFORM is set (parent Makefile handles it otherwise)
 ifneq ($(MTK_PLATFORM),)
+# MT6768: platform audio built by the parent Makefile, not here
+ifneq ($(MTK_PLATFORM),mt6768)
 obj-y += ../$(MTK_PLATFORM)/
+endif
 endif
 
 # spm

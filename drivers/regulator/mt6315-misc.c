@@ -112,7 +112,7 @@ void mt6315_vmd1_pmic_setting_on(void)
 	mt6315_S3_default_vosel();
 }
 
-static int is_mt6315_S3_exist(void)
+static int __maybe_unused is_mt6315_S3_exist(void)
 {
 	int ret = 0;
 	struct regulator *reg;
@@ -128,7 +128,7 @@ static int is_mt6315_S3_exist(void)
 }
 
 #if !(defined(CONFIG_MACH_MT6833) || defined(CONFIG_MACH_MT6853))
-static int is_mt6315_S6_exist(void)
+static int __maybe_unused is_mt6315_S6_exist(void)
 {
 	int ret = 0;
 	struct regulator *reg;
@@ -273,7 +273,7 @@ static void mt6315_vbuck4_lp_setting(struct regmap *regmap,
 }
 
 
-static void mt6315_lp_set(unsigned char slave_id, unsigned char buck_id,
+static void __maybe_unused mt6315_lp_set(unsigned char slave_id, unsigned char buck_id,
 		   enum MT6315_BUCK_EN_USER user, unsigned char op_mode,
 		   unsigned char op_en, unsigned char op_cfg)
 {
@@ -305,7 +305,7 @@ static void mt6315_lp_set(unsigned char slave_id, unsigned char buck_id,
 }
 
 /* enable VDIG18 SRCLKEN low power mode */
-static void mt6315_vdig18_hw_op_set(unsigned char slave_id, unsigned char en)
+static void __maybe_unused mt6315_vdig18_hw_op_set(unsigned char slave_id, unsigned char en)
 {
 	struct mt6315_misc *mt6315;
 	struct regmap *regmap;

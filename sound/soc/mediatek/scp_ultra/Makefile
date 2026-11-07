@@ -6,6 +6,8 @@ MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))
 
 ifeq ($(CONFIG_MTK_ULTRASND_PROXIMITY),y)
 ccflags-y += -I$(srctree)/sound/soc/mediatek/common
+ccflags-y += -I$(srctree)/drivers/misc/mediatek/include
+ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat
 ccflags-y += -I$(srctree)/sound/soc/mediatek/utility
 ccflags-y += -I$(srctree)/sound/soc/mediatek/$(MTK_PLATFORM)/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/scp/include

@@ -2805,7 +2805,7 @@ int mtk_drm_ioctl_read_sw_reg(struct drm_device *dev, void *data,
 	struct mtk_ddp_comp *aal_comp =
 		private->ddp_comp[DDP_COMPONENT_AAL0];
 #if defined(CCORR_SUPPORT)
-	struct mtk_ddp_comp *ccorr_comp =
+	struct mtk_ddp_comp *ccorr_comp __maybe_unused =
 		private->ddp_comp[DDP_COMPONENT_CCORR0];
 #endif
 	unsigned int ret = 0;
@@ -3053,7 +3053,7 @@ int mtk_drm_ioctl_read_reg(struct drm_device *dev, void *data,
 	struct mtk_drm_private *private = dev->dev_private;
 	struct mtk_ddp_comp *comp = private->ddp_comp[DDP_COMPONENT_COLOR0];
 	unsigned long flags;
-	struct mtk_ddp_comp *ccorr_comp =
+	struct mtk_ddp_comp *ccorr_comp __maybe_unused =
 		private->ddp_comp[DDP_COMPONENT_CCORR0];
 
 	pa = (unsigned int)rParams->reg;
@@ -3108,7 +3108,7 @@ int mtk_drm_ioctl_write_reg(struct drm_device *dev, void *data,
 	struct mtk_ddp_comp *comp = private->ddp_comp[DDP_COMPONENT_COLOR0];
 	struct drm_crtc *crtc = private->crtc[0];
 	struct DISP_WRITE_REG *wParams = data;
-	struct mtk_ddp_comp *ccorr_comp =
+	struct mtk_ddp_comp *ccorr_comp __maybe_unused =
 		private->ddp_comp[DDP_COMPONENT_CCORR0];
 	unsigned int pa = (unsigned int)wParams->reg;
 

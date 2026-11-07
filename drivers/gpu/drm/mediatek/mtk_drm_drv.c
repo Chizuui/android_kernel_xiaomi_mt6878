@@ -3814,7 +3814,7 @@ static int mtk_drm_probe(struct platform_device *pdev)
 	private->mmsys_dev = dev;
 
 	if (private->data->bypass_infra_ddr_control) {
-		struct device_node *infra_node;
+		struct device_node *infra_node __maybe_unused;
 #if defined(CONFIG_MACH_MT6781)
 		struct resource infra_mem_res;
 #endif
@@ -3845,6 +3845,7 @@ static int mtk_drm_probe(struct platform_device *pdev)
 				DDPMSG("%s, infra_regs:0x%p, infra_regs_pa:0x%llx\n",
 					__func__, (void *)private->infra_regs,
 					private->infra_regs_pa);
+			of_node_put(infra_node);
 		}
 #elif defined(CONFIG_MACH_MT6781)
 		infra_node = of_find_compatible_node(NULL, NULL, "mediatek,infracfg_ao");
@@ -3865,9 +3866,9 @@ static int mtk_drm_probe(struct platform_device *pdev)
 				DDPMSG("%s, infra_regs:0x%p, infra_regs_pa:0x%llx\n",
 					__func__, (void *)private->infra_regs,
 					private->infra_regs_pa);
+			of_node_put(infra_node);
 		}
 #endif
-		of_node_put(infra_node);
 	}
 
 	/* Get and enable top clk align to HW */

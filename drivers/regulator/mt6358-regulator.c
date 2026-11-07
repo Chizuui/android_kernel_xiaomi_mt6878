@@ -224,24 +224,24 @@ struct mt_regulator_init_data {
 	.qi = BIT(15),					\
 }
 
-static const struct regulator_linear_range mt_volt_range1[] = {
+static const struct linear_range mt_volt_range1[] = {
 	REGULATOR_LINEAR_RANGE(500000, 0, 0x7f, 6250),
 };
 
-static const struct regulator_linear_range mt_volt_range2[] = {
+static const struct linear_range mt_volt_range2[] = {
 	REGULATOR_LINEAR_RANGE(500000, 0, 0x7f, 12500),
 };
 
-static const struct regulator_linear_range mt_volt_range3[] = {
+static const struct linear_range mt_volt_range3[] = {
 	REGULATOR_LINEAR_RANGE(500000, 0, 0x3f, 50000),
 };
 
-static const struct regulator_linear_range mt_volt_range4[] = {
+static const struct linear_range mt_volt_range4[] = {
 	REGULATOR_LINEAR_RANGE(1000000, 0, 0x7f, 12500),
 };
 
 /* for vmc voltage calibration: 1.86V */
-static const struct regulator_linear_range mt_volt_range5[] = {
+static const struct linear_range mt_volt_range5[] = {
 	REGULATOR_LINEAR_RANGE(1800000, 0x400, 0x400, 0),
 	REGULATOR_LINEAR_RANGE(1810000, 0x401, 0x40a, 10000),
 	REGULATOR_LINEAR_RANGE(2900000, 0xa00, 0xa00, 0),
@@ -1058,10 +1058,10 @@ static irqreturn_t mt6358_oc_irq(int irq, void *data)
 	disable_irq_nosync(info->irq);
 	if (!regulator_is_enabled_regmap(rdev))
 		goto delayed_enable;
-	mutex_lock(&rdev->mutex);
+	ww_mutex_lock(&rdev->mutex, NULL);
 	regulator_notifier_call_chain(rdev, REGULATOR_EVENT_OVER_CURRENT,
 				      NULL);
-	mutex_unlock(&rdev->mutex);
+	ww_mutex_unlock(&rdev->mutex);
 delayed_enable:
 	schedule_delayed_work(&info->oc_work,
 			      msecs_to_jiffies(info->oc_irq_enable_delay_ms));

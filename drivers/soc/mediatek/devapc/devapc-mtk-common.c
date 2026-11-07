@@ -420,7 +420,7 @@ static void dump_backtrace(void *passed_regs)
 
 	DEVAPC_MSG("****** %s ******\n",
 			"[All Current Task Stack]");
-	show_stack(current, NULL);
+	show_stack(current, NULL, KERN_DEFAULT);
 
 	DEVAPC_MSG("====== %s ======\n",
 			"End of dumping Device APC violation tracing");

@@ -11,13 +11,19 @@ else
 MTK_PLATFORM := $(subst ",,$(CONFIG_MTK_PLATFORM))
 endif
 
-# mt6877 has no scp_vow platform dir; use mt6853 (same family)
+# mt6877/mt6768 have no scp_vow platform dir; use mt6853 (same family)
 ifeq ($(MTK_PLATFORM),mt6877)
+MTK_PLATFORM := mt6853
+endif
+ifeq ($(MTK_PLATFORM),mt6768)
 MTK_PLATFORM := mt6853
 endif
 
 # scp vow include path
 subdir-ccflags-y += -I$(srctree)/sound/soc/mediatek/common
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat/$(MTK_PLATFORM)/include
 subdir-ccflags-y += -I$(srctree)/sound/soc/mediatek/$(MTK_PLATFORM)/
 subdir-ccflags-y += -I$(srctree)/sound/soc/mediatek/scp_vow/$(MTK_PLATFORM)/
 subdir-ccflags-y += -I$(srctree)/sound/soc/mediatek/scp_vow/

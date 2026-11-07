@@ -139,7 +139,7 @@ static void disp_ccorr_multiply_3x3(unsigned int ccorrCoef[3][3],
 {
 	int temp_Result;
 	int signedCcorrCoef[3][3];
-	int i, j;
+	int __maybe_unused i, __maybe_unused j;
 
 	/* convert unsigned 12 bit ccorr coefficient to signed 12 bit format */
 	for (i = 0; i < 3; i += 1) {
@@ -234,7 +234,7 @@ static int disp_ccorr_write_coef_reg(struct mtk_ddp_comp *comp,
 	int id = index_of_ccorr(comp->id);
 	unsigned int temp_matrix[3][3];
 	unsigned int cfg_val;
-	int i, j;
+	int __maybe_unused i, __maybe_unused j;
 
 	if (lock)
 		mutex_lock(&g_ccorr_global_lock);
