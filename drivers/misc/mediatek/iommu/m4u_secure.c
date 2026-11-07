@@ -547,6 +547,10 @@ static long m4u_compat_ioctl(struct file *filp,
 #define m4u_compat_ioctl  NULL
 #endif
 
+/* Debug /proc entry; the usable interface is the char device. */
+static const struct proc_ops m4u_proc_fops = {
+};
+
 static const struct file_operations m4u_fops = {
 	.owner = THIS_MODULE,
 	.open = m4u_open,
@@ -580,8 +584,13 @@ static int m4u_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	m4u_dev->dev = dev;
+	/*
+	 * proc_create() takes a struct proc_ops, while m4u_fops is a character
+	 * device handler (open/release/ioctl). Create the debug entry with an
+	 * empty proc_ops so the two uses stay separate.
+	 */
 	m4u_dev->m4u_dev_proc_entry = proc_create("m4u", 0644, NULL,
-							 &m4u_fops);
+							 &m4u_proc_fops);
 	if (!m4u_dev->m4u_dev_proc_entry) {
 		pr_err("proc m4u create error\n");
 		kfree(m4u_dev);

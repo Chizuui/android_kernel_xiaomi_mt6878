@@ -15,13 +15,15 @@ ifeq ($(CONFIG_MTK_AEE_FEATURE),y)
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat
 endif
 
-ifeq ($(CONFIG_TRUSTONIC_TEE_SUPPORT),y)
-ccflags-y += -I$(srctree)/drivers/tee/gud/$(CONFIG_TRUSTONIC_TEE_VERSION)/MobiCoreDriver/public
-ccflags-y += -I$(srctree)/drivers/tee/gud/$(CONFIG_TRUSTONIC_TEE_VERSION)/MobiCoreDriver/public/GP
+# TEE headers, same selection the geniezone and mdp drivers use.
+ifneq ($(filter y m, $(CONFIG_TRUSTONIC_TEE_SUPPORT)),)
+include $(srctree)/drivers/tee/gud/Makefile.include
+else ifneq ($(filter y m, $(CONFIG_MICROTRUST_TEE_SUPPORT)),)
+include $(srctree)/drivers/tee/teei/Makefile.include
 endif
 
 obj-$(CONFIG_MTK_IOMMU_MISC_SEC) += m4u_secure.o
 obj-$(CONFIG_MTK_IOMMU_MISC_DBG) += m4u_debug.o
-ifeq ($(CONFIG_MTK_PSEUDO_M4U),)
-obj-$(CONFIG_MTK_CAM_GENIEZONE_SUPPORT) += iommu_pseudo.o
+ifneq ($(CONFIG_MTK_PSEUDO_M4U),y)
+obj-$(CONFIG_MTK_ENABLE_GENIEZONE) += iommu_pseudo.o
 endif
