@@ -1,3 +1,4 @@
+#include <linux/time.h>
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
  * Copyright (c) 2015 MediaTek Inc.
@@ -66,7 +67,7 @@ struct DumpFirstErrorStruct {
 	u32 cmdqCount;
 	s32 cmdqMaxSize;
 	bool flag;
-	struct timeval savetv;
+	struct timespec64 savetv;
 };
 #endif
 

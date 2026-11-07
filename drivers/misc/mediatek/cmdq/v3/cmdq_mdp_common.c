@@ -2558,7 +2558,7 @@ static void cmdq_mdp_begin_task_virtual(struct cmdqRecStruct *handle,
 	mdp_curr_pmqos = (struct mdp_pmqos *)handle->prop_addr;
 	pmqos_curr_record->submit_tm = curr_time;
 	pmqos_curr_record->end_tm.tv_sec = mdp_curr_pmqos->tv_sec;
-	pmqos_curr_record->end_tm.tv_nsec / 1000 = mdp_curr_pmqos->tv_nsec / 1000;
+	pmqos_curr_record->end_tm.tv_nsec = mdp_curr_pmqos->tv_nsec;
 
 	CMDQ_LOG_PMQOS(
 		"[MDP]mdp %d pixel, mdp %d byte, isp %d pixel, isp %d byte, submit %06ld us, end %06ld us\n",

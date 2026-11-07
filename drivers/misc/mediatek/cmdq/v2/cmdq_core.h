@@ -130,7 +130,7 @@ struct DumpFirstErrorStruct {
 	uint32_t cmdqCount;
 	int32_t cmdqMaxSize;
 	bool flag;
-	struct timeval savetv;
+	struct timespec64 savetv;
 };
 #endif
 
