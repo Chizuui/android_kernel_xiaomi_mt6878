@@ -853,6 +853,12 @@ static int mtk_pd_adapter_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto err_register_adapter_dev;
 
+	if (!info->adapter_dev_name) {
+		chr_err("missing adapter_name; skip PD adapter\n");
+		ret = -EINVAL;
+		goto err_register_adapter_dev;
+	}
+
 	info->adapter_dev = adapter_device_register(info->adapter_dev_name,
 		&pdev->dev, info, &adapter_ops, NULL);
 	if (IS_ERR_OR_NULL(info->adapter_dev)) {
