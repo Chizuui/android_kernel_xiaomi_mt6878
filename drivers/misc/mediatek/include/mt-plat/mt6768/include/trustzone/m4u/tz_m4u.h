@@ -5,6 +5,13 @@
 #ifndef __TZ_M4U_H__
 #define __TZ_M4U_H__
 
+/* Secure ID list used by the mdp / display secure paths. */
+enum SEC_ID {
+	SEC_ID_SEC_CAM = 0,
+	SEC_ID_SVP,
+	SEC_ID_WFD,
+};
+
 /* #include "drStd.h" */
 #ifdef CONFIG_MTK_PSEUDO_M4U
 #include "mach/mt_iommu.h"

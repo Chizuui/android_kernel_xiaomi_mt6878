@@ -82,7 +82,9 @@
 #define M4U_PORT_VENC_REF_CHROMA	MTK_M4U_ID(4, 10)
 
 #define M4U_PORT_UNKNOWN	(M4U_PORT_VENC_REF_CHROMA + 1)
+#ifndef M4U_PORT_NR
 #define M4U_PORT_NR (61)
+#endif
 
 /* for pusedo ccu device */
 #define CCU_PSEUDO_LARBID (MTK_IOMMU_LARB_NR + 1)

@@ -31,6 +31,8 @@ ccflags-$(CONFIG_MACH_MT6873) += -DCMDQ_MDP_ENABLE_SPR
 ccflags-$(CONFIG_MACH_MT6873) += -DMDP_MMPATH
 ccflags-$(CONFIG_MACH_MT6853) += -DCMDQ_MDP_ENABLE_SPR
 ccflags-$(CONFIG_MACH_MT6853) += -DMDP_MMPATH
+ccflags-$(CONFIG_MACH_MT6768) += -DCMDQ_MDP_ENABLE_SPR
+ccflags-$(CONFIG_MACH_MT6768) += -DMDP_MMPATH
 ccflags-$(CONFIG_MACH_MT6833) += -DCMDQ_MDP_ENABLE_SPR
 ccflags-$(CONFIG_MACH_MT6833) += -DMDP_MMPATH
 ccflags-$(CONFIG_MACH_MT6877) += -DCMDQ_MDP_ENABLE_SPR
@@ -129,7 +131,9 @@ obj-$(CONFIG_MTK_CMDQ_MBOX_EXT) += cmdq_mmp.o
 endif
 
 ifeq ($(platformdir_exists), y)
+ifneq ($(CONFIG_MACH_MT6768),y)
 obj-$(CONFIG_MTK_CMDQ_MBOX_EXT) += $(subst ",,$(MTK_PLATFORM))/
+endif
 endif
 
 # mdp_sw_sync
