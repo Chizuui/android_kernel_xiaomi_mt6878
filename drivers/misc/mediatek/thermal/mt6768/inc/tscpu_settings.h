@@ -17,8 +17,16 @@
  * Genernal
  *=============================================================
  */
+#ifndef MIN
+#ifndef MIN
 #define MIN(_a_, _b_) ((_a_) > (_b_) ? (_b_) : (_a_))
+#endif
+#endif
+#ifndef MAX
+#ifndef MAX
 #define MAX(_a_, _b_) ((_a_) > (_b_) ? (_a_) : (_b_))
+#endif
+#endif
 #define _BIT_(_bit_)		(unsigned int)(1 << (_bit_))
 #define _BITMASK_(_bits_)	(((unsigned int) -1 >> (31 - ((1) ?	\
 				_bits_))) & ~((1U << ((0) ? _bits_)) - 1))

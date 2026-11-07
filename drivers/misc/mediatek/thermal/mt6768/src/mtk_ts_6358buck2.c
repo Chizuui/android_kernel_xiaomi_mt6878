@@ -28,7 +28,7 @@
  */
 static kuid_t uid = KUIDT_INIT(0);
 static kgid_t gid = KGIDT_INIT(1000);
-static DEFINE_SEMAPHORE(sem_mutex);
+static DEFINE_SEMAPHORE(sem_mutex, 1);
 static int isTimerCancelled;
 
 /**
@@ -79,11 +79,11 @@ static int mt6358tsbuck2_get_temp(struct thermal_zone_device *thermal, int *t)
 	mt6358tsbuck2_cur_temp = *t;
 
 	if ((int)*t >= polling_trip_temp1)
-		thermal->polling_delay = interval * 1000;
+		thermal->polling_delay_jiffies = interval * 1000;
 	else if ((int)*t < polling_trip_temp2)
-		thermal->polling_delay = interval * polling_factor2;
+		thermal->polling_delay_jiffies = interval * polling_factor2;
 	else
-		thermal->polling_delay = interval * polling_factor1;
+		thermal->polling_delay_jiffies = interval * polling_factor1;
 
 	return 0;
 }
@@ -185,13 +185,6 @@ static int mt6358tsbuck2_unbind(struct thermal_zone_device *thermal,
 	return 0;
 }
 
-static int mt6358tsbuck2_get_mode
-(struct thermal_zone_device *thermal, enum thermal_device_mode *mode)
-{
-	*mode = (kernelmode) ? THERMAL_DEVICE_ENABLED : THERMAL_DEVICE_DISABLED;
-	return 0;
-}
-
 static int mt6358tsbuck2_set_mode
 (struct thermal_zone_device *thermal, enum thermal_device_mode mode)
 {
@@ -199,14 +192,14 @@ static int mt6358tsbuck2_set_mode
 	return 0;
 }
 
-static int mt6358tsbuck2_get_trip_type
+static int __maybe_unused mt6358tsbuck2_get_trip_type
 (struct thermal_zone_device *thermal, int trip, enum thermal_trip_type *type)
 {
 	*type = g_THERMAL_TRIP[trip];
 	return 0;
 }
 
-static int mt6358tsbuck2_get_trip_temp
+static int __maybe_unused mt6358tsbuck2_get_trip_temp
 (struct thermal_zone_device *thermal, int trip, int *temp)
 {
 	*temp = trip_temp[trip];
@@ -225,10 +218,7 @@ static struct thermal_zone_device_ops mt6358tsbuck2_dev_ops = {
 	.bind = mt6358tsbuck2_bind,
 	.unbind = mt6358tsbuck2_unbind,
 	.get_temp = mt6358tsbuck2_get_temp,
-	.get_mode = mt6358tsbuck2_get_mode,
-	.set_mode = mt6358tsbuck2_set_mode,
-	.get_trip_type = mt6358tsbuck2_get_trip_type,
-	.get_trip_temp = mt6358tsbuck2_get_trip_temp,
+	.change_mode = mt6358tsbuck2_set_mode,
 	.get_crit_temp = mt6358tsbuck2_get_crit_temp,
 };
 
@@ -531,8 +521,9 @@ static int mt6358tsbuck2_register_thermal(void)
 
 	/* trips : trip 0~2 */
 	thz_dev = mtk_thermal_zone_device_register(
-			"mt6358tsbuck2", num_trip, NULL,
-			&mt6358tsbuck2_dev_ops, 0, 0, 0, interval * 1000);
+			"mt6358tsbuck2", NULL, num_trip,
+			NULL, &mt6358tsbuck2_dev_ops, 0, 0,
+			0, interval * 1000);
 
 	return 0;
 }
@@ -560,13 +551,12 @@ static int mt6358tsbuck2_open(struct inode *inode, struct file *file)
 	return single_open(file, mt6358tsbuck2_read, NULL);
 }
 
-static const struct file_operations mt6358tsbuck2_fops = {
-	.owner = THIS_MODULE,
-	.open = mt6358tsbuck2_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.write = mt6358tsbuck2_write,
-	.release = single_release,
+static const struct proc_ops mt6358tsbuck2_fops = {
+	.proc_open = mt6358tsbuck2_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_write = mt6358tsbuck2_write,
+	.proc_release = single_release,
 };
 
 static int __init mt6358tsbuck2_init(void)
