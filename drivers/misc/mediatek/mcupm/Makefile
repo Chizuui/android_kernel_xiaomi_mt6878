@@ -4,8 +4,11 @@ else
 MTK_PLATFORM := $(CONFIG_MTK_PLATFORM)
 endif
 
-# mt6877 has no mcupm platform dir; use mt6853 (same family)
+# mt6877 and mt6768 have no mcupm platform dir; use mt6853 (same family)
 ifeq ($(subst ",,$(MTK_PLATFORM)),mt6877)
+MTK_PLATFORM := mt6853
+endif
+ifeq ($(subst ",,$(MTK_PLATFORM)),mt6768)
 MTK_PLATFORM := mt6853
 endif
 

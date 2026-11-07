@@ -79,7 +79,7 @@ enum mtk_iommu_sec_id {
 #include "mtk_fbconfig_kdebug.h"
 #include "mtk_layering_rule_base.h"
 
-static DEFINE_RATELIMIT_STATE(ovl_status_ratelimit, 5 * HZ, 1) __maybe_unused;
+static DEFINE_RATELIMIT_STATE(ovl_status_ratelimit, 5 * HZ, 1);
 
 static struct mtk_drm_property mtk_crtc_property[CRTC_PROP_MAX] = {
 	{DRM_MODE_PROP_ATOMIC, "OVERLAP_LAYER_NUM", 0, UINT_MAX, 0},
