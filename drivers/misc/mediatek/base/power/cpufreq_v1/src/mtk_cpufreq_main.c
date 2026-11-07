@@ -4,6 +4,7 @@
  */
 
 #include <linux/random.h>
+#include <linux/prandom.h>
 #include <linux/pm_opp.h>
 #include <linux/energy_model.h>
 //#include <mt-plat/met_drv.h>
@@ -826,7 +827,7 @@ static void _mt_cpufreq_set(struct cpufreq_policy *policy,
 		return;
 
 	if (do_dvfs_stress_test && action == MT_CPU_DVFS_NORMAL) {
-		new_opp_idx = prandom_u32() % p->nr_opp_tbl;
+		new_opp_idx = get_random_u32() % p->nr_opp_tbl;
 		if (new_opp_idx == p->idx_opp_tbl)
 			new_opp_idx = (p->nr_opp_tbl ? p->nr_opp_tbl - 1 : 0);
 	}
@@ -1150,7 +1151,7 @@ static void ppm_limit_callback(struct ppm_client_req req)
 /*
  * cpufreq driver
  */
-static int _mt_cpufreq_verify(struct cpufreq_policy *policy)
+static int _mt_cpufreq_verify(struct cpufreq_policy_data *policy)
 {
 	struct mt_cpu_dvfs *p;
 	int ret; /* cpufreq_frequency_table_verify() always return 0 */
@@ -1199,7 +1200,7 @@ static int _mt_cpufreq_init(struct cpufreq_policy *policy)
 	int pd_ret = -EINVAL;
 	unsigned long flags;
 	struct device *cpu_dev;
-	struct em_data_callback em_cb = EM_DATA_CB(of_dev_pm_opp_get_cpu_power);
+	/* ponytail: 6.6 EM has no of_dev_pm_opp_get_cpu_power; use generic power cb */
 
 	FUNC_ENTER(FUNC_LV_MODULE);
 
@@ -1294,7 +1295,7 @@ static int _mt_cpufreq_init(struct cpufreq_policy *policy)
 	if (dev_pm_opp_of_cpumask_add_table(policy->cpus))
 		tag_pr_notice("failed to add opp framework table\n");
 
-	pd_ret = em_register_perf_domain(policy->cpus, NR_FREQ, &em_cb);
+	pd_ret = em_dev_register_perf_domain(cpu_dev, NR_FREQ, NULL, policy->cpus, true);
 
 	tag_pr_notice("energy model register result %d\n", pd_ret);
 

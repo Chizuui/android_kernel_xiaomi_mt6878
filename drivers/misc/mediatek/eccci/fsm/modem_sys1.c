@@ -511,7 +511,11 @@ static void md_cd_smem_sub_region_init_old(struct ccci_modem *md)
 
 #if IS_ENABLED(CONFIG_MTK_PBM)
 	addr += CCCI_SMEM_SIZE_DBM_GUARD;
+#if defined(CONFIG_MACH_MT6768)
+	init_md_section_level(KR_MD1);
+#else
 	init_md_section_level(KR_MD1, addr);
+#endif
 #endif
 }
 
@@ -528,7 +532,11 @@ static void md_cd_smem_sub_region_init_new(struct ccci_modem *md)
 	}
 	/* Region 0, dbm */
 	addr = (int __iomem *)dbm->base_ap_view_vir;
+#if defined(CONFIG_MACH_MT6768)
+	init_md_section_level(KR_MD1);
+#else
 	init_md_section_level(KR_MD1, addr);
+#endif
 #endif
 }
 

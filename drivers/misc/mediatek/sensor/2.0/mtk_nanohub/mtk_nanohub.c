@@ -181,12 +181,12 @@ void __attribute__((weak)) scp_register_feature(enum feature_id id)
 {
 }
 void __attribute__((weak)) scp_register_sensor(enum feature_id id,
-		enum scp_sensor_id sensor_id)
+		int sensor_id)
 {
 }
 
 void __attribute__((weak)) scp_deregister_sensor(enum feature_id id,
-		enum scp_sensor_id sensor_id)
+		int sensor_id)
 {
 }
 
