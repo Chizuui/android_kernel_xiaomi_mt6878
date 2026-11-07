@@ -40,7 +40,7 @@
 
 #define MAKE_TWO_RGB565_COLOR(high, low)  (((low) << 16) | (high))
 
-DEFINE_SEMAPHORE(dal_sem);
+DEFINE_SEMAPHORE(dal_sem, 1);
 
 inline enum DAL_STATUS DAL_LOCK(void)
 {

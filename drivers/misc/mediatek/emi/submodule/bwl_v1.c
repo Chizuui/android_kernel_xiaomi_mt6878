@@ -23,7 +23,7 @@
 #include <dramc.h>
 #endif
 
-DEFINE_SEMAPHORE(bwl_sem);
+DEFINE_SEMAPHORE(bwl_sem, 1);
 
 static void __iomem *CEN_EMI_BASE;
 static void __iomem *CHN_EMI_BASE[MAX_CH];

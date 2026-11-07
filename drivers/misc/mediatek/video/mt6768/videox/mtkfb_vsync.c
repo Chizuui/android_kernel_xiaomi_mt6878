@@ -54,7 +54,7 @@ static dev_t mtkfb_vsync_devno;
 static struct cdev *mtkfb_vsync_cdev;
 static struct class *mtkfb_vsync_class;
 
-DEFINE_SEMAPHORE(mtkfb_vsync_sem);
+DEFINE_SEMAPHORE(mtkfb_vsync_sem, 1);
 
 void mtkfb_vsync_log_enable(int enable)
 {

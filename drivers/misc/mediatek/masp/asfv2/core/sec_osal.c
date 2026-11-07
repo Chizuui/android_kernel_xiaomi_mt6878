@@ -34,14 +34,14 @@
 /*****************************************************************************
  * GLOBAL VARIABLE
  *****************************************************************************/
-DEFINE_SEMAPHORE(hacc_sem);
-DEFINE_SEMAPHORE(mtd_sem);
-DEFINE_SEMAPHORE(rid_sem);
-DEFINE_SEMAPHORE(sec_mm_sem);
-DEFINE_SEMAPHORE(osal_fp_sem);
-DEFINE_SEMAPHORE(osal_verify_sem);
-DEFINE_SEMAPHORE(osal_secro_sem);
-DEFINE_SEMAPHORE(osal_secro_v5_sem);
+DEFINE_SEMAPHORE(hacc_sem, 1);
+DEFINE_SEMAPHORE(mtd_sem, 1);
+DEFINE_SEMAPHORE(rid_sem, 1);
+DEFINE_SEMAPHORE(sec_mm_sem, 1);
+DEFINE_SEMAPHORE(osal_fp_sem, 1);
+DEFINE_SEMAPHORE(osal_verify_sem, 1);
+DEFINE_SEMAPHORE(osal_secro_sem, 1);
+DEFINE_SEMAPHORE(osal_secro_v5_sem, 1);
 
 /*****************************************************************************
  * LOCAL VARIABLE

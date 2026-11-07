@@ -23,7 +23,7 @@
 
 static kuid_t uid = KUIDT_INIT(0);
 static kgid_t gid = KGIDT_INIT(1000);
-static DEFINE_SEMAPHORE(sem_mutex);
+static DEFINE_SEMAPHORE(sem_mutex, 1);
 /*
  *The thermal policy is meaningless here.
  *We only use it to make this thermal zone work.

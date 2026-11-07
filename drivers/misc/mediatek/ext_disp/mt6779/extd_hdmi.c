@@ -126,7 +126,7 @@ static unsigned int hdmi_resolution_param_table[][3] = {
 	{1920, 1080, 60},
 };
 
-DEFINE_SEMAPHORE(hdmi_update_mutex);
+DEFINE_SEMAPHORE(hdmi_update_mutex, 1);
 
 /* global variables */
 #ifdef EXTD_DBG_USE_INNER_BUF

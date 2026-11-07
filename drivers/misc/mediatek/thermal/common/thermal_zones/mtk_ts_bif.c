@@ -35,7 +35,7 @@
  *Macro
  *=============================================================
  */
-static DEFINE_SEMAPHORE(sem_mutex);
+static DEFINE_SEMAPHORE(sem_mutex, 1);
 static int isTimerCancelled;
 
 #define MTKTS_BIF_TEMP_CRIT 60000	/* 60.000 degree Celsius */

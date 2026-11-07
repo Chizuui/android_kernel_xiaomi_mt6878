@@ -170,9 +170,9 @@ unsigned int ext_lcd_fps = 6000;
 char ext_mtkfb_lcm_name[256] = { 0 };
 #endif
 
-DEFINE_SEMAPHORE(sem_flipping);
-DEFINE_SEMAPHORE(sem_early_suspend);
-DEFINE_SEMAPHORE(sem_overlay_buffer);
+DEFINE_SEMAPHORE(sem_flipping, 1);
+DEFINE_SEMAPHORE(sem_early_suspend, 1);
+DEFINE_SEMAPHORE(sem_overlay_buffer, 1);
 
 /* ------------------------------------------------------------------------- */
 /* local function declarations */

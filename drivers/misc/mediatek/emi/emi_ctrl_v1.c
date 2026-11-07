@@ -60,11 +60,11 @@ static int ddr_info_open(struct inode *inode, struct file *file)
 	return single_open(file, ddr_info_show, NULL);
 }
 
-static const struct file_operations ddr_info_proc_fops = {
-	.open = ddr_info_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops ddr_info_proc_fops = {
+	.proc_open = ddr_info_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
 };
 
 static int emi_remove(struct platform_device *dev)

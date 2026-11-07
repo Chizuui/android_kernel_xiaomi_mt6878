@@ -635,12 +635,15 @@ enum usb_state_enum {
 	USB_CONFIGURED
 };
 
-#if defined(CONFIG_MACH_MT6877) || defined(CONFIG_MACH_MT6893) \
-	|| defined(CONFIG_MACH_MT6885) || defined(CONFIG_MACH_MT6785) \
-	|| defined(CONFIG_MACH_MT6853)
+/*
+ * The charger drivers in this tree all implement is_usb_rdy(struct device *).
+ * Keep a weak fallback with the same prototype for platforms that do not.
+ */
 bool is_usb_rdy(struct device *dev);
-#else
-bool __attribute__((weak)) is_usb_rdy(void)
+#if !defined(CONFIG_MACH_MT6877) && !defined(CONFIG_MACH_MT6893) && \
+	!defined(CONFIG_MACH_MT6885) && !defined(CONFIG_MACH_MT6785) && \
+	!defined(CONFIG_MACH_MT6853)
+static inline bool __is_usb_rdy_stub(struct device *dev)
 {
 	pr_info("%s is not defined\n", __func__);
 	return false;

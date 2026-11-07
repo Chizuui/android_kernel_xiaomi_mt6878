@@ -115,7 +115,7 @@ unsigned int project_is_bsp;
 enum HDMI_VIDEO_RESOLUTION hdmi_max_resolution;
 
 
-DEFINE_SEMAPHORE(hdmi_update_mutex);
+DEFINE_SEMAPHORE(hdmi_update_mutex, 1);
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 /* ~~~~~~~~~~~the gloable variable~~~~~~~~~~ */

@@ -25,6 +25,8 @@
  ****************************************************************************/
 #ifndef _DEA_MODIFY_
 #include <linux/init.h>		/* For init/exit macros */
+#include <linux/iio/consumer.h>
+#include <linux/of_device.h>
 #include <linux/module.h>	/* For MODULE_ marcros  */
 #include <linux/wait.h>		/* For wait queue*/
 #include <linux/sched.h>	/* For wait queue*/

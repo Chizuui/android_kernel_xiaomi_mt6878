@@ -12,7 +12,7 @@
 #include "extd_utils.h"
 #include "extd_log.h"
 
-static DEFINE_SEMAPHORE(extd_mutex);
+static DEFINE_SEMAPHORE(extd_mutex, 1);
 
 int extd_mutex_init(struct mutex *m)
 {

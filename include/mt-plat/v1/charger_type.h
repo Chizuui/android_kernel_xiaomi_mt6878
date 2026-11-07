@@ -195,13 +195,11 @@ extern void mtk_charger_int_handler(void);
 extern int register_charger_det_callback(int (*func)(int));
 #endif /*CONFIG_MTK_PUMP_EXPRESS_PLUS_30_SUPPORT*/
 
-#if defined(CONFIG_MACH_MT6877) || defined(CONFIG_MACH_MT6893) \
-	|| defined(CONFIG_MACH_MT6885) || defined(CONFIG_MACH_MT6785) \
-	|| defined(CONFIG_MACH_MT6853)
+/*
+ * Every charger implementation in this tree (mt6360, mt6362, rt9471, ...)
+ * takes the device pointer, so declare that form unconditionally.
+ */
 extern bool is_usb_rdy(struct device *dev);
-#else
-extern bool is_usb_rdy(void);
-#endif
 extern bool mt_usb_is_device(void);
 extern int is_otg_en(void);
 
