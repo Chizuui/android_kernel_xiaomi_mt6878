@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: GPL-2.0+
+#
+# Kernel configuration file for the UFS Host Controller core.
+#
+# Copyright (C) 2011-2013 Samsung India Software Operations
+#
+# Authors:
+#	Santosh Yaraganavi <santosh.sy@samsung.com>
+#	Vinayak Holikatti <h.vinayak@samsung.com>
+
+config SCSI_UFS_BSG
+	bool "Universal Flash Storage BSG device node"
+	select BLK_DEV_BSGLIB
+	help
+	  Universal Flash Storage (UFS) is SCSI transport specification for
+	  accessing flash storage on digital cameras, mobile phones and
+	  consumer electronic devices.
+	  A UFS controller communicates with a UFS device by exchanging
+	  UFS Protocol Information Units (UPIUs).
+	  UPIUs can not only be used as a transport layer for the SCSI protocol
+	  but are also used by the UFS native command set.
+	  This transport driver supports exchanging UFS protocol information units
+	  with a UFS device. See also the ufshcd driver, which is a SCSI driver
+	  that supports UFS devices.
+
+	  Select this if you need a bsg device node for your UFS controller.
+	  If unsure, say N.
+
+config SCSI_UFS_CRYPTO
+	bool "UFS Crypto Engine Support"
+	depends on BLK_INLINE_ENCRYPTION
+	help
+	  Enable Crypto Engine Support in UFS.
+	  Enabling this makes it possible for the kernel to use the crypto
+	  capabilities of the UFS device (if present) to perform crypto
+	  operations on data being transferred to/from the device.
+
+config SCSI_UFS_FAULT_INJECTION
+	bool "UFS Fault Injection Support"
+	depends on FAULT_INJECTION
+	help
+	  Enable fault injection support in the UFS driver. This makes it easier
+	  to test the UFS error handler and abort handler.
+
+config SCSI_UFS_HWMON
+	bool "UFS Temperature Notification"
+	depends on SCSI_UFSHCD=HWMON || HWMON=y
+	help
+	  This provides support for UFS hardware monitoring. If enabled,
+	  a hardware monitoring device will be created for the UFS device.
+
+	  If unsure, say N.
+
+config SCSI_UFS_FEATURE
+	bool "UFS vendor feature compatibility"
+	depends on SCSI_UFSHCD
+	help
+	  Keep the vendor feature namespace used by the Ruby 4.19 UFS driver.
+	  The common UFS core remains responsible for standard protocol support.
+
+config SCSI_UFS_TW
+	bool "MediaTek Turbo Write compatibility"
+	depends on SCSI_UFSHCD && SCSI_UFS_FEATURE
+	help
+	  Preserve Ruby's per-LU Turbo Write lifetime and suspend handling on top
+	  of the 6.6 UFS WriteBooster implementation.
+
+config SCSI_UFS_TW_IGNORE_GUARANTEE_BIT
+	bool "Ignore Turbo Write lifetime guarantee bit"
+	depends on SCSI_UFS_TW
+	help
+	  Keep Turbo Write enabled when a device reports that its lifetime estimate
+	  is not guaranteed. Select this only for devices known to report that bit
+	  incorrectly.
+
+config SCSI_UFS_HPB
+	bool "Support UFS Host Performance Booster"
+	depends on SCSI_UFSHCD
+	help
+	  Enable the UFS Host Performance Booster path. HPB caches the device's
+	  logical-to-physical map in host memory and adds the device's physical
+	  page information to eligible read commands.
+
